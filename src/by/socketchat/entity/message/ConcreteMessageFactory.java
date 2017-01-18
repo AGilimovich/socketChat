@@ -11,11 +11,13 @@ import by.socketchat.entity.message.request.contacts.ContactsRequest;
 import by.socketchat.entity.message.request.registration.AbstractRegRequest;
 import by.socketchat.entity.message.request.registration.RegRequest;
 import by.socketchat.entity.user.IUser;
+import by.socketchat.server.IServer;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Properties;
 
 /**
@@ -25,17 +27,28 @@ public class ConcreteMessageFactory extends AbstractMessageFactory {
     private final String timePattern = "DD.MM.YYY HH:mm:ss";
     private DateFormat format = new SimpleDateFormat(timePattern);
     private AbstractDao<IUser> userDao;
+    private IServer server;
 
     @Override
-    public AbstractChatMessage newChatMessage(Properties properties) {
-        Date time = new Date();
-//        try {
-//            time = format.parse(properties.getProperty("time"));
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
+    public void setServer(IServer server) {
+        this.server = server;
+    }
 
-        IUser sender = userDao.findById(Long.parseLong(properties.getProperty("sender")));
+    @Override
+    public void setUserDao(AbstractDao<IUser> userDao) {
+        this.userDao = userDao;
+    }
+
+
+    @Override
+    public AbstractChatMessage newChatMessage(IConnection connection, Properties properties) {
+        if (userDao == null || server == null) {
+            return null;
+        }
+
+        Date time = new Date();
+        //IUser sender = userDao.findById(Long.parseLong(properties.getProperty("sender")));
+        IUser sender = server.getUserForConnection(connection);
         IUser receiver = userDao.findById(Long.parseLong(properties.getProperty("receiver")));
         String content = properties.getProperty("content");
 

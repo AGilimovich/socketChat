@@ -17,7 +17,7 @@ public interface IServer {
 
     void closeConnection(AbstractConnection con);
 
-//        void onMessage(IConnection connection, String message);
+    //        void onMessage(IConnection connection, String message);
     void onMessage(IConnection connection, byte[] message);
 
     Map<IConnection, IUser> getAuthenticatedConnections();
@@ -27,5 +27,7 @@ public interface IServer {
     void removeAuthenticatedConnection(IConnection connection);
 
     IConnection getUserConnection(IUser user);
+
+    IUser getUserForConnection(IConnection connection);
 
 }

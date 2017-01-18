@@ -20,12 +20,12 @@ import java.util.Set;
 public class AuthService implements IAuthService {
     private AbstractDao<IUser> userDao;
     private AbstractAuthFormatter formatter;
-    private IServer dispatcher;
+    private IServer server;
 
-    public AuthService(AbstractDao<IUser> userDao, AbstractAuthFormatter formatter, IServer dispatcher) {
+    public AuthService(AbstractDao<IUser> userDao, AbstractAuthFormatter formatter, IServer server) {
         this.userDao = userDao;
         this.formatter = formatter;
-        this.dispatcher = dispatcher;
+        this.server = server;
     }
 
     @Override
@@ -46,7 +46,11 @@ public class AuthService implements IAuthService {
         while (it.hasNext()) {
             if ((u = it.next()).getName().equals(request.getName())) {
                 if (u.getPassword().equals(request.getPassword())) {
-                    dispatcher.addAuthenticatedConnection(connection, u);
+                    server.addAuthenticatedConnection(connection, u);
+
+
+
+
                     try {
                         connection.write(Encoder.encode(formatter.format(AuthStatus.AUTHENTICATED)));
                     } catch (IOException e) {

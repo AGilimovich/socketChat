@@ -23,7 +23,6 @@ import by.socketchat.service.chat.IChatService;
 import by.socketchat.service.contacts.IContactsService;
 import by.socketchat.service.registration.IRegistrationService;
 import by.socketchat.utility.encoding.Decoder;
-import by.socketchat.utility.encoding.Encoder;
 import by.socketchat.utility.json.Json;
 import by.socketchat.utility.logger.Logger;
 
@@ -74,6 +73,7 @@ public class Server implements IServer {
 
         //FACTORIES
         this.messageFactory = messageFactory;
+
         this.serviceFactory = serviceFactory;
         this.formatterFactory = formatterFactory;
         this.daoFactory = daoFactory;
@@ -86,7 +86,9 @@ public class Server implements IServer {
         //DAO
         userDao = daoFactory.getUserDao();
         messageDao = daoFactory.getMessageDao();
-        userDao.add(User.newUser("1", "12345"));
+        userDao.add(User.newUser("Alex", "1"));
+        userDao.add(User.newUser("Charlie", "1"));
+        userDao.add(User.newUser("Pam", "1"));
 
         //FORMATTERS
         regFormatter = formatterFactory.getRegFormatter();
@@ -102,6 +104,9 @@ public class Server implements IServer {
         serviceFactory.setContactsFormatter(contactsFormatter);
         serviceFactory.setRegFormatter(regFormatter);
 
+        //MESSAGE FACTORY INIT
+        messageFactory.setServer(this);
+        messageFactory.setUserDao(userDao);
 
         //SERVICES
         try {
@@ -137,18 +142,19 @@ public class Server implements IServer {
         }
         switch (properties.getProperty("type")) {
             case "0":
+
                 if (authenticationService.authenticate(connection, messageFactory.newAuthRequest(properties)) == AuthStatus.AUTHENTICATED) {
-//                    contactsService.updateAllAuthenticatedUsersContacts();
+                    contactsService.updateAllAuthenticatedUsersContacts();
                 }
                 break;
             case "1":
                 if (connection.getConnectionState() == ConnectionState.AUTHENTICATED) {
-                    chatService.send(messageFactory.newChatMessage(properties));
+                    chatService.send(messageFactory.newChatMessage(connection, properties));
                 }
                 break;
             case "2":
                 if (connection.getConnectionState() == ConnectionState.AUTHENTICATED) {
-                    //   contactsService.updateUserContacts(connection);
+                    contactsService.updateUserContacts(connection);
                 }
                 contactsService.updateUserContacts(connection);
                 break;
@@ -188,6 +194,11 @@ public class Server implements IServer {
             }
         }
         return null;
+    }
+
+    @Override
+    public IUser getUserForConnection(IConnection connection) {
+        return authenticatedConnections.get(connection);
     }
 
     public void start() {

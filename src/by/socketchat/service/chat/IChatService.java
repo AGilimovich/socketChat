@@ -1,5 +1,6 @@
 package by.socketchat.service.chat;
 
+import by.socketchat.connection.IConnection;
 import by.socketchat.dao.AbstractDao;
 import by.socketchat.entity.message.chat.AbstractChatMessage;
 import by.socketchat.entity.user.IUser;

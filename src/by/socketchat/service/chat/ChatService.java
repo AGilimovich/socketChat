@@ -6,6 +6,7 @@ import by.socketchat.server.IServer;
 import by.socketchat.entity.message.chat.AbstractChatMessage;
 import by.socketchat.entity.user.IUser;
 import by.socketchat.formatter.chat.AbstractChatFormatter;
+import by.socketchat.utility.encoding.Encoder;
 
 import java.io.IOException;
 
@@ -14,11 +15,11 @@ import java.io.IOException;
  */
 public class ChatService implements IChatService {
     private AbstractDao<IUser> userDao;
-    private IServer dispatcher;
+    private IServer server;
     private AbstractChatFormatter formatter;
 
-    public ChatService(IServer dispatcher, AbstractDao<IUser> userDao, AbstractChatFormatter formatter) {
-        this.dispatcher = dispatcher;
+    public ChatService(IServer server, AbstractDao<IUser> userDao, AbstractChatFormatter formatter) {
+        this.server = server;
         this.userDao = userDao;
         this.formatter = formatter;
     }
@@ -26,10 +27,9 @@ public class ChatService implements IChatService {
     @Override
     public void send(AbstractChatMessage message) {
 
-        IConnection receiverCon = dispatcher.getUserConnection(message.getReceiver());
-        String text = formatter.format(message);
+        IConnection receiverCon = server.getUserConnection(message.getReceiver());
         try {
-            receiverCon.write(text.getBytes("UTF-8"));
+            receiverCon.write(Encoder.encode(formatter.format(message)));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,7 @@
 package by.socketchat.formatter.chat;
 
 import by.socketchat.entity.message.chat.AbstractChatMessage;
+import by.socketchat.formatter.MessageType;
 import by.socketchat.utility.json.Json;
 
 import java.text.DateFormat;
@@ -17,7 +18,8 @@ public class ChatFormatter extends AbstractChatFormatter {
     @Override
     public String format(AbstractChatMessage message) {
         Properties props = new Properties();
-        props.setProperty("sender", String.valueOf(message.getSender().getId()));
+        props.setProperty("type", String.valueOf(MessageType.CHAT.getCode()));
+        props.setProperty("sender", String.valueOf(message.getSender().getName()));
         props.setProperty("time", timeFormat.format(message.getTime()));
         props.setProperty("content", message.getContent());
         return Json.stringify(props);

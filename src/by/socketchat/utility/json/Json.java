@@ -72,7 +72,7 @@ public class Json {
                 sb.append(COMMA);
             } else sb.append(SQUARE_BRACKET_OPENED);
             IUser user = it.next();
-            sb.append(FIGURED_BRACKET_OPENED + QUOTE + "user" + user.getId() + QUOTE + COLON);
+          //  sb.append(FIGURED_BRACKET_OPENED + QUOTE + "user" + user.getId() + QUOTE + COLON);
             sb.append(stringify(user));
             isEmpty = false;
         }

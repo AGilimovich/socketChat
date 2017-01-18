@@ -8,6 +8,9 @@ import by.socketchat.formatter.contacts.AbstractContactsFormatter;
 import by.socketchat.utility.encoding.Encoder;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by Администратор on 06.01.2017.
@@ -37,6 +40,7 @@ public class ContactsService implements IContactsService {
 
     @Override
     public void updateAllAuthenticatedUsersContacts() {
+
         for (IConnection connection : dispatcher.getAuthenticatedConnections().keySet()) {
             try {
                 connection.write(Encoder.encode(formatter.format(dispatcher.getAuthenticatedConnections().values())));
