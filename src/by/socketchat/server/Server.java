@@ -29,10 +29,7 @@ import by.socketchat.utility.logger.Logger;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by Администратор on 29.11.2016.
@@ -67,6 +64,8 @@ public class Server implements IServer {
 
 
     private Map<IConnection, IUser> authenticatedConnections;
+    private Set<IUser> authenticatedUsers;
+
 
     public Server(final int port, AbstractServiceFactory serviceFactory, AbstractDaoFactory daoFactory, AbstractMessageFactory messageFactory, AbstractFormatterFactory formatterFactory, AbstractConnectionFactory connectionFactory) {
         this.port = port;
@@ -78,6 +77,7 @@ public class Server implements IServer {
         this.formatterFactory = formatterFactory;
         this.daoFactory = daoFactory;
         authenticatedConnections = new HashMap<IConnection, IUser>();
+        authenticatedUsers = new HashSet<IUser>();
         this.connectionFactory = connectionFactory;
 
     }
@@ -161,6 +161,10 @@ public class Server implements IServer {
             case "3":
                 registrationService.register(connection, messageFactory.newRegRequest(properties));
                 break;
+            case "4":
+                connection.close();
+            default:
+                return;//TODO message format exception
 
         }
 
@@ -176,12 +180,34 @@ public class Server implements IServer {
     @Override
     public void addAuthenticatedConnection(IConnection connection, IUser user) {
         authenticatedConnections.put(connection, user);
+        if (!authenticatedUsers.contains(user)) {
+            authenticatedUsers.add(user);
+        }
+
     }
 
     @Override
     public void removeAuthenticatedConnection(IConnection connection) {
+        IUser user = getUserForConnection(connection);
+        authenticatedUsers.remove(user);
         authenticatedConnections.remove(connection);
+
     }
+
+    @Override
+    public Set<IUser> getAuthenticatedUsers() {
+        return authenticatedUsers;
+    }
+
+//    @Override
+//    public void addAuthenticatedUser(IUser user) {
+//        authenticatedUsers.add(user);
+//    }
+//
+//    @Override
+//    public void removeAuthenticatedUser(IUser user) {
+//        authenticatedUsers.remove(user);
+//    }
 
 
     @Override
@@ -203,29 +229,32 @@ public class Server implements IServer {
 
     public void start() {
         init();
-        ServerSocket socket = null;
+        ServerSocket serverSocket = null;
         try {
-            socket = new ServerSocket(port);
+            serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
-            if (!socket.isClosed()) {
+            if (!serverSocket.isClosed()) {
                 try {
-                    socket.close();
+                    serverSocket.close();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             }
         }
-        while (true) {
-            try {
-                Socket client = socket.accept();
+        if (serverSocket != null) {
+            while (true) {
+                Socket client = null;
+                try {
+                    client = serverSocket.accept();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(client);
                 AbstractConnection con = connectionFactory.getConnection(this, client);
                 if (con != null) {
                     con.start();
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }

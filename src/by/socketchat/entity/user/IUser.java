@@ -9,11 +9,11 @@ import java.util.Properties;
  */
 public interface IUser {
 
-    String getName();
+    String getLogin();
 
     String getPassword();
 
-    void setName(String name);
+    void setLogin(String login);
 
     void setPassword(String password);
 

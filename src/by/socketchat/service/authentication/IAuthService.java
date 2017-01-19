@@ -13,6 +13,11 @@ import by.socketchat.service.ServiceInitException;
 public interface IAuthService {
     AuthStatus authenticate(IConnection connection, AbstractAuthRequest request);
 
+
+
+
+
+
 //    void setUserDao(AbstractDao<IUser> userDB);
 //
 //    void setFormatter(AbstractAuthFormatter formatter);

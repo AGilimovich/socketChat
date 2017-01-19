@@ -19,7 +19,7 @@ public class ChatFormatter extends AbstractChatFormatter {
     public String format(AbstractChatMessage message) {
         Properties props = new Properties();
         props.setProperty("type", String.valueOf(MessageType.CHAT.getCode()));
-        props.setProperty("sender", String.valueOf(message.getSender().getName()));
+        props.setProperty("sender", String.valueOf(message.getSender().getLogin()));
         props.setProperty("time", timeFormat.format(message.getTime()));
         props.setProperty("content", message.getContent());
         return Json.stringify(props);

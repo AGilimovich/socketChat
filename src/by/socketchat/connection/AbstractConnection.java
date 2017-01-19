@@ -12,9 +12,9 @@ public abstract class AbstractConnection extends Thread implements IConnection {
 
     private BufferedReader in;
     private OutputStream out;
-    private int DEFAULT_BUF_SIZE = 1024;
-
     private InputStream byteIn;
+
+    private int DEFAULT_BUF_SIZE = 1024;
 
 
     public AbstractConnection(Socket socket) throws IOException {
@@ -30,21 +30,47 @@ public abstract class AbstractConnection extends Thread implements IConnection {
     }
 
 
+//    @Override
+//    public synchronized String read() throws IOException {
+//        StringBuilder sb = new StringBuilder();
+//        char[] buf = new char[DEFAULT_BUF_SIZE];
+//        int res = 0;
+//        char[] temp = new char[1];
+//        byte tt = 0;
+//        System.out.println("reading");//TODO delete
+//        if (in ==null) {
+//            System.out.println("in == null");//TODO delete
+//
+//        }
+//
+//        while (in.ready() && (res = in.read()) != -1) {
+//            System.out.print(res);//TODO delete
+//            temp[0] = (char) res;
+//            tt = (byte) res;
+//            sb.append((char) res);
+//
+//        }
+//        System.out.println(sb);//TODO delete
+//        return sb.toString();
+//    }
+
+
     @Override
     public synchronized String read() throws IOException {
         StringBuilder sb = new StringBuilder();
-        char[] buf = new char[DEFAULT_BUF_SIZE];
-        int res = 0;
+        byte[] buf = new byte[DEFAULT_BUF_SIZE];
         char[] temp = new char[1];
-        byte tt = 0;
-        while (in.ready() && (res = in.read()) != -1) {
-            temp[0] = (char) res;
-            tt = (byte) res;
-            sb.append((char) res);
+        int res = 0;
 
+        while ((res = byteIn.read(buf)) != -1) {
+            System.out.println("Reading");
+            sb.append(new String(buf, "UTF-8"));
+            break;
         }
+        System.out.println(sb);//TODO delete
         return sb.toString();
     }
+
 
     //
     @Override
@@ -139,6 +165,7 @@ public abstract class AbstractConnection extends Thread implements IConnection {
     protected void onDestroy() throws IOException {
         in.close();
         out.close();
+        byteIn.close();
     }
 
 }

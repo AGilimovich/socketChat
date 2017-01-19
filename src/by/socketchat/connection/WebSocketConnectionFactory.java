@@ -21,7 +21,6 @@ public class WebSocketConnectionFactory extends AbstractConnectionFactory {
         if (server == null || socket == null) {
             return null;
         }
-
         WebSocketConnection con = null;
         try {
             con = new WebSocketConnection(server, socket);

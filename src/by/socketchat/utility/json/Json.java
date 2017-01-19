@@ -58,7 +58,7 @@ public class Json {
     public static <T extends IUser> String stringify(T user) {
         Properties properties = new Properties();
         properties.setProperty("id", String.valueOf(user.getId()));
-        properties.setProperty("name", user.getName());
+        properties.setProperty("name", user.getLogin());
         return stringify(properties);
     }
 

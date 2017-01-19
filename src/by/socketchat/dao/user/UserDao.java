@@ -55,7 +55,7 @@ public class UserDao extends AbstractDao<IUser> {
         IUser user = null;
         Iterator<IUser> it = users.iterator();
         while (it.hasNext()) {
-            if ((user = it.next()).getName().equals(name)) {
+            if ((user = it.next()).getLogin().equals(name)) {
                 return user;
             }
         }

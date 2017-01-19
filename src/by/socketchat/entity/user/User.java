@@ -11,26 +11,26 @@ import java.util.Properties;
  */
 public class User implements IUser {
     private final long id;
-    private String name;
+    private String name; //TODO
+    private String login;
     private String password;
     private final Date registrationTime;
-    private List<IUser> contactList;
+    private List<IUser> contactList;//TODO
 
-    private User(String name, String password) {
+    private User(String login, String password) {
         id = IDGenerator.generateUserID();
         registrationTime = new Date();
-        this.name = name;
+        this.login = login;
         this.password = password;
 
     }
 
-    public static IUser newUser(String name, String password) {
-        return new User(name, password);
+    public static IUser newUser(String login, String password) {
+        return new User(login, password);
     }
 
-    @Override
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
     @Override
@@ -38,9 +38,8 @@ public class User implements IUser {
         return password;
     }
 
-    @Override
-    public void setName(String name) {
-        this.name = name;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     @Override
@@ -72,8 +71,23 @@ public class User implements IUser {
     public Properties toProperties() {
         return new Properties() {{
             setProperty("id", String.valueOf(id));
-            setProperty("name", name);
+            setProperty("login", login);
 
         }};
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (this == o) return true;
+        User temp = null;
+        if (o instanceof User) {
+            temp = (User) o;
+        } else return false;
+        if (id == temp.getId() && login.equals(temp.getLogin()) && password.equals(temp.getPassword()) && registrationTime.equals(temp.getRegistrationTime())) {
+            return true;
+        }
+        else return false;
+
     }
 }

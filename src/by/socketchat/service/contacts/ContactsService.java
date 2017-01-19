@@ -8,22 +8,22 @@ import by.socketchat.formatter.contacts.AbstractContactsFormatter;
 import by.socketchat.utility.encoding.Encoder;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 /**
  * Created by Администратор on 06.01.2017.
  */
 public class ContactsService implements IContactsService {
-    private IServer dispatcher;
+    private IServer server;
     private AbstractContactsFormatter formatter;
+
 
     //DAO
     private AbstractDao<IUser> userDao;
 
-    public ContactsService(IServer dispatcher, AbstractContactsFormatter formatter, AbstractDao<IUser> userDao) {
-        this.dispatcher = dispatcher;
+    public ContactsService(IServer server, AbstractContactsFormatter formatter, AbstractDao<IUser> userDao) {
+        this.server = server;
         this.formatter = formatter;
         this.userDao = userDao;
     }
@@ -31,8 +31,16 @@ public class ContactsService implements IContactsService {
 
     @Override
     public void updateUserContacts(IConnection connection) {
+        Collection<IUser> contacts = new HashSet<IUser>();
+        IUser requester = server.getUserForConnection(connection);
+
+        for (IUser contact : server.getAuthenticatedUsers()) {
+            if (requester != contact)
+                contact.addContact(contact);
+        }
+
         try {
-            connection.write(Encoder.encode(formatter.format(dispatcher.getAuthenticatedConnections().values())));
+            connection.write(Encoder.encode(formatter.format(contacts)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -40,10 +48,17 @@ public class ContactsService implements IContactsService {
 
     @Override
     public void updateAllAuthenticatedUsersContacts() {
+        for (IConnection connection : server.getAuthenticatedConnections().keySet()) {
+            Collection<IUser> contacts = new HashSet<IUser>();
+            IUser requester = server.getUserForConnection(connection);
+            for (IUser contact : server.getAuthenticatedUsers()) {
+                if (requester != contact)
+                    contacts.add(contact);
+            }
 
-        for (IConnection connection : dispatcher.getAuthenticatedConnections().keySet()) {
             try {
-                connection.write(Encoder.encode(formatter.format(dispatcher.getAuthenticatedConnections().values())));
+                if (!contacts.isEmpty())
+                    connection.write(Encoder.encode(formatter.format(contacts)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
