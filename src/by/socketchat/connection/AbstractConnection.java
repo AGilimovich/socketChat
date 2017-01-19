@@ -29,6 +29,16 @@ public abstract class AbstractConnection extends Thread implements IConnection {
         out.write(bytes);
     }
 
+    protected String readLine() {
+        String line = null;
+        try {
+            line = in.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return line;
+    }
+
 
 //    @Override
 //    public synchronized String read() throws IOException {
@@ -37,20 +47,16 @@ public abstract class AbstractConnection extends Thread implements IConnection {
 //        int res = 0;
 //        char[] temp = new char[1];
 //        byte tt = 0;
-//        System.out.println("reading");//TODO delete
 //        if (in ==null) {
-//            System.out.println("in == null");//TODO delete
 //
 //        }
 //
 //        while (in.ready() && (res = in.read()) != -1) {
-//            System.out.print(res);//TODO delete
 //            temp[0] = (char) res;
 //            tt = (byte) res;
 //            sb.append((char) res);
 //
 //        }
-//        System.out.println(sb);//TODO delete
 //        return sb.toString();
 //    }
 
@@ -67,7 +73,6 @@ public abstract class AbstractConnection extends Thread implements IConnection {
             sb.append(new String(buf, "UTF-8"));
             break;
         }
-        System.out.println(sb);//TODO delete
         return sb.toString();
     }
 

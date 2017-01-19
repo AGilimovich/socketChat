@@ -28,10 +28,12 @@ public class ChatService implements IChatService {
     public void send(AbstractChatMessage message) {
 
         IConnection receiverCon = server.getUserConnection(message.getReceiver());
-        try {
-            receiverCon.write(Encoder.encode(formatter.format(message)));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (receiverCon != null) {
+            try {
+                receiverCon.write(Encoder.encode(formatter.format(message)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
 

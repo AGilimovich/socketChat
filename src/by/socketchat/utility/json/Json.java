@@ -3,6 +3,7 @@ package by.socketchat.utility.json;
 import by.socketchat.entity.user.IUser;
 
 import java.util.*;
+import java.util.concurrent.ThreadFactory;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +32,7 @@ public class Json {
 
 
     public static String stringify(Properties message) {
+
         StringBuilder sb = new StringBuilder();
         Enumeration enumeration = message.propertyNames();
         boolean isEmpty = true;
@@ -67,10 +69,11 @@ public class Json {
         StringBuilder sb = new StringBuilder();
         Iterator<IUser> it = users.iterator();
         boolean isEmpty = true;
+        sb.append(SQUARE_BRACKET_OPENED);
         while (it.hasNext()) {
             if (!isEmpty) {
                 sb.append(COMMA);
-            } else sb.append(SQUARE_BRACKET_OPENED);
+            }
             IUser user = it.next();
           //  sb.append(FIGURED_BRACKET_OPENED + QUOTE + "user" + user.getId() + QUOTE + COLON);
             sb.append(stringify(user));

@@ -33,13 +33,11 @@ public class WebsocketConnector implements IConnector {
         String message = null;
         try {
             message = new String(con.read());
-            System.out.println(message);//TODO delete
 
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (!Pattern.compile(END_OF_LINE_PATTERN).matcher(message).find()) {
-            System.out.println("no match ENDOFLINE");//TODO delete
             return false;
         }
         if (Pattern.compile(MESSAGE_GET_PATTERN).matcher(message).find()) {
@@ -50,7 +48,6 @@ public class WebsocketConnector implements IConnector {
                     }
                 formatter.format(HANDSHAKE_RESPONSE, convert(matcher.group(1)));
                 try {
-                    System.out.println("sending response");//TODO delete
                     con.write(sb.toString().getBytes("UTF-8"));
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -59,12 +56,10 @@ public class WebsocketConnector implements IConnector {
                 return true;
             }
         }
-        System.out.println("no match GET MESSAGE");//TODO delete
         return false;
     }
 
     private String convert(String key) {
-        System.out.println("converting");//TODO delete
         try {
             return DatatypeConverter.printBase64Binary(MessageDigest.getInstance("SHA-1").digest((key + KEY).getBytes("UTF-8")));
         } catch (NoSuchAlgorithmException e) {

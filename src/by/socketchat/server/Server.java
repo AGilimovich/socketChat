@@ -20,6 +20,7 @@ import by.socketchat.service.ServiceInitException;
 import by.socketchat.service.authentication.AuthStatus;
 import by.socketchat.service.authentication.IAuthService;
 import by.socketchat.service.chat.IChatService;
+import by.socketchat.service.contacts.ContactsService;
 import by.socketchat.service.contacts.IContactsService;
 import by.socketchat.service.registration.IRegistrationService;
 import by.socketchat.utility.encoding.Decoder;
@@ -191,6 +192,7 @@ public class Server implements IServer {
         IUser user = getUserForConnection(connection);
         authenticatedUsers.remove(user);
         authenticatedConnections.remove(connection);
+        contactsService.updateAllAuthenticatedUsersContacts();
 
     }
 
@@ -234,13 +236,13 @@ public class Server implements IServer {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
-            if (!serverSocket.isClosed()) {
-                try {
-                    serverSocket.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
+//            if (!serverSocket.isClosed()) {
+//                try {
+//                    serverSocket.close();
+//                } catch (IOException e1) {
+//                    e1.printStackTrace();
+//                }
+//            }
         }
         if (serverSocket != null) {
             while (true) {

@@ -57,7 +57,7 @@ public class ContactsService implements IContactsService {
             }
 
             try {
-                if (!contacts.isEmpty())
+                    System.out.println(formatter.format(contacts));//TODO delete
                     connection.write(Encoder.encode(formatter.format(contacts)));
             } catch (IOException e) {
                 e.printStackTrace();

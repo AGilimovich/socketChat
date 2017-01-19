@@ -37,14 +37,22 @@ public class WebSocketConnection extends AbstractConnection {
 //        String message = null;
         byte[] bytes = null;
         try {
-            if ((bytes = readEncoded())!=null) {
+            if ((bytes = readEncoded()) != null) {
 
                 server.onMessage(this, bytes);
+            } else {
+                close();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private void checkAlive() {
+        if (readLine() == null) {
+            close();
+        }
     }
 
     @Override
@@ -59,6 +67,7 @@ public class WebSocketConnection extends AbstractConnection {
     public void run() {
         String message = null;
         while (true) {
+            // checkAlive();
             checkIncomingMessage();
         }
 
