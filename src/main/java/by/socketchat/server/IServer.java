@@ -2,7 +2,8 @@ package by.socketchat.server;
 
 import by.socketchat.connection.AbstractConnection;
 import by.socketchat.connection.IConnection;
-import by.socketchat.entity.user.IUser;
+import by.socketchat.entity.user.User;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Set;
@@ -14,27 +15,24 @@ public interface IServer {
 
     void start();
 
-   // void onConnect(IConnection con);
+    void setPort(int port);
+
 
     void closeConnection(AbstractConnection con);
 
-    //        void onMessage(IConnection connection, String message);
     void onMessage(IConnection connection, byte[] message);
 
-    Map<IConnection, IUser> getAuthenticatedConnections();
+    Map<IConnection, User> getAuthenticatedConnections();
 
-    void addAuthenticatedConnection(IConnection connection, IUser user);
+    void addAuthenticatedConnection(IConnection connection, User user);
 
     void removeAuthenticatedConnection(IConnection connection);
 
-//    void addAuthenticatedUser(IUser user);
-//
-//    void removeAuthenticatedUser(IUser user);
 
-    Set<IUser> getAuthenticatedUsers ();
+    Set<User> getAuthenticatedUsers();
 
-    IConnection getUserConnection(IUser user);
+    IConnection getUserConnection(User user);
 
-    IUser getUserForConnection(IConnection connection);
+    User getUserForConnection(IConnection connection);
 
 }

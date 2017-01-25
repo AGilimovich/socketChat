@@ -1,7 +1,5 @@
 package by.socketchat.entity.message.request.auth;
 
-import by.socketchat.entity.user.IUser;
-
 import java.util.Date;
 
 /**

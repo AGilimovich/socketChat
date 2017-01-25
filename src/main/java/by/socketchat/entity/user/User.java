@@ -1,7 +1,10 @@
 package by.socketchat.entity.user;
 
-import by.socketchat.utility.idgenerator.IDGenerator;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -9,65 +12,73 @@ import java.util.Properties;
 /**
  * Created by Администратор on 29.11.2016.
  */
-public class User implements IUser {
-    private final long id;
-    private String name; //TODO
-    private String login;
-    private String password;
-    private final Date registrationTime;
-    private List<IUser> contactList;//TODO
 
-    private User(String login, String password) {
-        id = IDGenerator.generateUserID();
-        registrationTime = new Date();
+@Entity
+@Table(name = "users")
+
+@NamedQueries({
+        @NamedQuery(name = "User.getAll", query = "select distinct u from User u"),
+        @NamedQuery(name = "User.findById", query = "select distinct u from User u where u.id = :id"),
+        @NamedQuery(name = "User.findByLogin", query = "select distinct u from User u where u.login = :login")
+})
+
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(name = "name")
+    private String name; //TODO
+    @Column(name = "login")
+    private String login;
+    @Column(name = "password")
+    private String password;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Generated(GenerationTime.ALWAYS)
+    @Column(name = "regTime", insertable=false,updatable=false)
+    private Date registrationTime;
+
+    @OneToMany
+    @JoinColumn(name = "contacts")
+    private List<User> contactList = new ArrayList<User>();
+
+
+    public User(Long id, String name, String login, String password, Date registrationTime) {
+        this.id = id;
+        this.name = name;
         this.login = login;
         this.password = password;
-
+        this.registrationTime = registrationTime;
     }
 
-    public static IUser newUser(String login, String password) {
-        return new User(login, password);
+    public User() {
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getLogin() {
         return login;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    @Override
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    @Override
     public Date getRegistrationTime() {
         return registrationTime;
     }
 
-    @Override
-    public List<IUser> getContacts() {
+    public String getName() {
+        return name;
+    }
+
+    public List<User> getContacts() {
         return contactList;
     }
 
-    @Override
-    public void addContact(IUser contact) {
-        contactList.add(contact);
-    }
-
-    @Override
-    public long getId() {
-        return id;
-    }
-
-    @Override
     public Properties toProperties() {
         return new Properties() {{
             setProperty("id", String.valueOf(id));
@@ -86,8 +97,9 @@ public class User implements IUser {
         } else return false;
         if (id == temp.getId() && login.equals(temp.getLogin()) && password.equals(temp.getPassword()) && registrationTime.equals(temp.getRegistrationTime())) {
             return true;
-        }
-        else return false;
+        } else return false;
 
     }
+
+
 }

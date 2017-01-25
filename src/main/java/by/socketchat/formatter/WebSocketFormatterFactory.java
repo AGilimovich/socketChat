@@ -4,10 +4,10 @@ import by.socketchat.formatter.auth.AbstractAuthFormatter;
 import by.socketchat.formatter.auth.AuthFormatter;
 import by.socketchat.formatter.chat.AbstractChatFormatter;
 import by.socketchat.formatter.chat.ChatFormatter;
-import by.socketchat.formatter.registration.AbstractRegFormatter;
-import by.socketchat.formatter.registration.RegistrationFormatter;
 import by.socketchat.formatter.contacts.AbstractContactsFormatter;
 import by.socketchat.formatter.contacts.ContactsFormatter;
+import by.socketchat.formatter.registration.AbstractRegFormatter;
+import by.socketchat.formatter.registration.RegistrationFormatter;
 
 /**
  * Created by Aleksandr on 08.01.2017.

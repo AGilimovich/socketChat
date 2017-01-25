@@ -1,9 +1,11 @@
 package by.socketchat.utility.json;
 
-import by.socketchat.entity.user.IUser;
+import by.socketchat.entity.user.User;
 
-import java.util.*;
-import java.util.concurrent.ThreadFactory;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,7 +59,7 @@ public class Json {
     }
 
 
-    public static <T extends IUser> String stringify(T user) {
+    public static <T extends User> String stringify(T user) {
         Properties properties = new Properties();
         properties.setProperty("id", String.valueOf(user.getId()));
         properties.setProperty("name", user.getLogin());
@@ -65,16 +67,16 @@ public class Json {
     }
 
 
-    public static String stringify(Collection<IUser> users) {
+    public static String stringify(Collection<User> users) {
         StringBuilder sb = new StringBuilder();
-        Iterator<IUser> it = users.iterator();
+        Iterator<User> it = users.iterator();
         boolean isEmpty = true;
         sb.append(SQUARE_BRACKET_OPENED);
         while (it.hasNext()) {
             if (!isEmpty) {
                 sb.append(COMMA);
             }
-            IUser user = it.next();
+            User user = it.next();
             //  sb.append(FIGURED_BRACKET_OPENED + QUOTE + "user" + user.getId() + QUOTE + COLON);
             sb.append(stringify(user));
             isEmpty = false;

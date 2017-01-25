@@ -1,19 +1,11 @@
 package by.socketchat.service.chat;
 
-import by.socketchat.connection.IConnection;
-import by.socketchat.dao.AbstractDao;
-import by.socketchat.entity.message.chat.AbstractChatMessage;
-import by.socketchat.entity.user.IUser;
-import by.socketchat.formatter.chat.AbstractChatFormatter;
-import by.socketchat.service.ServiceInitException;
+import by.socketchat.entity.message.chat.ChatMessage;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by Aleksandr on 05.01.2017.
  */
 public interface IChatService {
-    void send(AbstractChatMessage message);
-
-//    void setUserDao(AbstractDao<IUser> userDao);
-//
-//    void setFormatter(AbstractChatFormatter formatter);
+    void send(ChatMessage message);
 }

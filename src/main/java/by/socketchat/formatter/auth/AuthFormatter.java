@@ -1,14 +1,16 @@
 package by.socketchat.formatter.auth;
 
-import by.socketchat.service.authentication.AuthStatus;
 import by.socketchat.formatter.MessageType;
+import by.socketchat.service.authentication.AuthStatus;
 import by.socketchat.utility.json.Json;
+import org.springframework.stereotype.Service;
 
 import java.util.Properties;
 
 /**
  * Created by Администратор on 27.12.2016.
  */
+@Service
 public class AuthFormatter extends AbstractAuthFormatter {
 
 

@@ -1,6 +1,6 @@
 package by.socketchat.entity.message.request.contacts;
 
-import by.socketchat.entity.user.IUser;
+import by.socketchat.entity.user.User;
 import by.socketchat.utility.idgenerator.IDGenerator;
 
 import java.util.Date;
@@ -12,10 +12,10 @@ public class ContactsRequest extends AbstractContactsRequest {
 
     private long id;
     private Date time;
-    private IUser user;
+    private User user;
 
 
-    public ContactsRequest(IUser user) {
+    public ContactsRequest(User user) {
         this.user = user;
         id = IDGenerator.generateMessageID();
         time = new Date();
@@ -23,7 +23,7 @@ public class ContactsRequest extends AbstractContactsRequest {
 
     }
     @Override
-    public IUser getUser() {
+    public User getUser() {
         return user;
     }
 

@@ -1,11 +1,14 @@
 package by.socketchat.service.validation;
 
+import org.springframework.stereotype.Service;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by Администратор on 22.12.2016.
  */
+@Service
 public class CredentialsValidationService implements IValidationService {
     private String namePattern;
     private final String DEFAULT_NAME_PATTERN = "\\w{1,20}";

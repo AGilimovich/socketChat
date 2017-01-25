@@ -1,11 +1,13 @@
 package by.socketchat.service.contacts;
 
 import by.socketchat.connection.IConnection;
-import by.socketchat.dao.AbstractDao;
-import by.socketchat.server.IServer;
-import by.socketchat.entity.user.IUser;
+import by.socketchat.dao.AbstractRepository;
+import by.socketchat.entity.user.User;
 import by.socketchat.formatter.contacts.AbstractContactsFormatter;
+import by.socketchat.server.Server;
 import by.socketchat.utility.encoding.Encoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -14,15 +16,18 @@ import java.util.HashSet;
 /**
  * Created by Администратор on 06.01.2017.
  */
+@Service
 public class ContactsService implements IContactsService {
-    private IServer server;
+    private Server server;
     private AbstractContactsFormatter formatter;
 
 
     //DAO
-    private AbstractDao<IUser> userDao;
+    private AbstractRepository<User> userDao;
 
-    public ContactsService(IServer server, AbstractContactsFormatter formatter, AbstractDao<IUser> userDao) {
+
+    @Autowired
+    public ContactsService(Server server, AbstractContactsFormatter formatter, AbstractRepository<User> userDao) {
         this.server = server;
         this.formatter = formatter;
         this.userDao = userDao;
@@ -31,27 +36,15 @@ public class ContactsService implements IContactsService {
 
     @Override
     public void updateUserContacts(IConnection connection) {
-        Collection<IUser> contacts = new HashSet<IUser>();
-        IUser requester = server.getUserForConnection(connection);
 
-        for (IUser contact : server.getAuthenticatedUsers()) {
-            if (requester != contact)
-                contact.addContact(contact);
-        }
-
-        try {
-            connection.write(Encoder.encode(formatter.format(contacts)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
     public void updateAllAuthenticatedUsersContacts() {
         for (IConnection connection : server.getAuthenticatedConnections().keySet()) {
-            Collection<IUser> contacts = new HashSet<IUser>();
-            IUser requester = server.getUserForConnection(connection);
-            for (IUser contact : server.getAuthenticatedUsers()) {
+            Collection<User> contacts = new HashSet<User>();
+            User requester = server.getUserForConnection(connection);
+            for (User contact : server.getAuthenticatedUsers()) {
                 if (requester != contact)
                     contacts.add(contact);
             }
@@ -67,7 +60,7 @@ public class ContactsService implements IContactsService {
     }
 
 //    @Override
-//    public void setUserDao(AbstractDao<IUser> userDao) {
+//    public void setUserDao(AbstractRepository<IUser> userDao) {
 //        this.userDao = userDao;
 //    }
 //

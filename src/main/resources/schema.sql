@@ -1,0 +1,27 @@
+DROP SCHEMA  IF EXISTS socketChat;
+CREATE SCHEMA socketChat;
+
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS messages;
+
+
+CREATE TABLE users (
+id IDENTITY,
+name VARCHAR(15) NOT NULL,
+login VARCHAR(15) NOT NULL,
+password VARCHAR(15) NOT NULL,
+contacts INTEGER,
+regTime TIMESTAMP,
+FOREIGN KEY (contacts) REFERENCES users(id)
+);
+
+
+CREATE TABLE messages(
+id IDENTITY,
+sender INTEGER NOT NULL,
+receiver INTEGER NOT NULL,
+content VARCHAR(200) NOT NULL,
+sendTime TIMESTAMP NOT NULL,
+FOREIGN KEY (sender) REFERENCES users(id),
+FOREIGN KEY(receiver) REFERENCES users(id)
+)

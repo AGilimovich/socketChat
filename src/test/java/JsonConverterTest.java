@@ -1,4 +1,4 @@
-import by.socketchat.entity.user.IUser;
+import by.socketchat.entity.user.User;
 import by.socketchat.utility.json.Json;
 
 import java.util.Collection;
@@ -11,11 +11,11 @@ import java.util.Properties;
 public class JsonConverterTest {
 
 
-    public void startUserCollectionStringifierTest(Collection<IUser> users) {
+    public void startUserCollectionStringifierTest(Collection<User> users) {
         System.out.println(Json.stringify(users));
     }
 
-    public void startUserStringifierTest(IUser user) {
+    public void startUserStringifierTest(User user) {
         System.out.println(Json.stringify(user));
     }
 

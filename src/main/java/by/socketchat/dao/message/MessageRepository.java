@@ -43,14 +43,17 @@ public class MessageRepository extends AbstractRepository<ChatMessage> {
     @Transactional
     @Override
     public List<ChatMessage> getAll() {
-        return currentSession()
-                .createCriteria(ChatMessage.class).list();
+
+        return currentSession().
+                getNamedQuery("ChatMessage.getAll").list();
+
     }
 
     @Transactional
     @Override
     public ChatMessage findById(long id) {
-        return (ChatMessage) currentSession().get(ChatMessage.class, id);
+        return (ChatMessage) currentSession().
+                getNamedQuery("ChatMessage.findById").setParameter("id", id).uniqueResult();
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package by.socketchat.connection.connector;
 
 import by.socketchat.connection.ConnectionState;
 import by.socketchat.connection.IConnection;
+import org.springframework.stereotype.Component;
 
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Администратор on 13.12.2016.
  */
+@Component
 public class WebsocketConnector implements IConnector {
     private final String END_OF_LINE_PATTERN = ".*\\r\\n\\r\\n";
     private final String MESSAGE_GET_PATTERN = "^GET";

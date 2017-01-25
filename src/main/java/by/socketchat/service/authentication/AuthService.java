@@ -3,31 +3,32 @@ package by.socketchat.service.authentication;
 
 import by.socketchat.connection.ConnectionState;
 import by.socketchat.connection.IConnection;
-import by.socketchat.dao.AbstractDao;
+import by.socketchat.dao.AbstractRepository;
 import by.socketchat.entity.message.request.auth.AbstractAuthRequest;
-import by.socketchat.entity.user.IUser;
+import by.socketchat.entity.user.User;
 import by.socketchat.formatter.auth.AbstractAuthFormatter;
-import by.socketchat.server.IServer;
+import by.socketchat.server.Server;
 import by.socketchat.utility.encoding.Encoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by Администратор on 30.11.2016.
  */
+@Service
 public class AuthService implements IAuthService {
-    private AbstractDao<IUser> userDao;
+    private AbstractRepository<User> userDao;
     private AbstractAuthFormatter formatter;
-    private IServer server;
-
-    private Map<IConnection, IUser> authenticatedConnections;
-    private Set<IUser> authenticatedUsers;
+    private Server server;
 
 
-    public AuthService(AbstractDao<IUser> userDao, AbstractAuthFormatter formatter, IServer server) {
-        authenticatedConnections = new HashMap<IConnection, IUser>();
-        authenticatedUsers = new HashSet<IUser>();
+
+    @Autowired
+    public AuthService(AbstractRepository<User> userDao, AbstractAuthFormatter formatter, Server server) {
         this.userDao = userDao;
         this.formatter = formatter;
         this.server = server;
@@ -35,7 +36,7 @@ public class AuthService implements IAuthService {
 
     @Override
     public AuthStatus authenticate(IConnection connection, AbstractAuthRequest request) {
-        Set<IUser> users = userDao.getAll();
+        List<User> users = userDao.getAll();
         if (users.isEmpty()) {
             try {
                 connection.write(Encoder.encode(formatter.format(AuthStatus.INVALID_CREDENTIALS)));
@@ -44,8 +45,8 @@ public class AuthService implements IAuthService {
             }
             return AuthStatus.INVALID_CREDENTIALS;
         }
-        Iterator<IUser> it = users.iterator();
-        IUser u = null;
+        Iterator<User> it = users.iterator();
+        User u = null;
 
 
         while (it.hasNext()) {
@@ -73,7 +74,6 @@ public class AuthService implements IAuthService {
         return AuthStatus.INVALID_CREDENTIALS;
 
     }
-
 
 
 }

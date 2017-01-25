@@ -1,6 +1,7 @@
 package by.socketchat.connection;
 
 import by.socketchat.server.IServer;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.Socket;

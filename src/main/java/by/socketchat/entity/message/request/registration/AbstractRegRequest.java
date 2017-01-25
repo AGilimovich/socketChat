@@ -1,8 +1,5 @@
 package by.socketchat.entity.message.request.registration;
 
-import by.socketchat.connection.IConnection;
-import by.socketchat.entity.user.IUser;
-
 import java.util.Date;
 
 /**
@@ -10,7 +7,7 @@ import java.util.Date;
  */
 public abstract class AbstractRegRequest {
 
-    public abstract String getName();
+    public abstract String getLogin();
 
     public abstract String getPassword();
 

@@ -1,6 +1,6 @@
 package by.socketchat.entity.message.request.contacts;
 
-import by.socketchat.entity.user.IUser;
+import by.socketchat.entity.user.User;
 
 import java.util.Date;
 
@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public abstract class AbstractContactsRequest {
 
-    public abstract IUser getUser();
+    public abstract User getUser();
 
 
     public abstract long getId();

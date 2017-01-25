@@ -1,28 +1,31 @@
 package by.socketchat.service.registration;
 
 import by.socketchat.connection.IConnection;
-import by.socketchat.dao.AbstractDao;
-import by.socketchat.server.IServer;
+import by.socketchat.dao.AbstractRepository;
 import by.socketchat.entity.message.request.registration.AbstractRegRequest;
-import by.socketchat.entity.user.IUser;
 import by.socketchat.entity.user.User;
 import by.socketchat.formatter.registration.AbstractRegFormatter;
+import by.socketchat.server.Server;
 import by.socketchat.service.validation.IValidationService;
 import by.socketchat.utility.encoding.Encoder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 /**
  * Created by Администратор on 22.12.2016.
  */
+@Service
 public class RegistrationService implements IRegistrationService {
-    private AbstractDao<IUser> userDao;
+    private AbstractRepository<User> userRepository;
     private IValidationService validator;
     private AbstractRegFormatter formatter;
-    private IServer dispatcher;
+    private Server dispatcher;
 
-    public RegistrationService(IServer dispatcher, AbstractDao<IUser> userDao, AbstractRegFormatter formatter, IValidationService validator) {
-        this.userDao = userDao;
+    @Autowired
+    public RegistrationService(Server dispatcher, AbstractRepository<User> userRepository, AbstractRegFormatter formatter, IValidationService validator) {
+        this.userRepository = userRepository;
         this.formatter = formatter;
         this.validator = validator;
         this.dispatcher = dispatcher;
@@ -31,10 +34,10 @@ public class RegistrationService implements IRegistrationService {
     @Override
     public RegistrationStatus register(IConnection connection, AbstractRegRequest request) {
         RegistrationStatus status = null;
-        switch (validator.validate(request.getName(), request.getPassword())) {
+        switch (validator.validate(request.getLogin(), request.getPassword())) {
             case VALID:
-                if (userDao.findByName(request.getName()) == null) {
-                    userDao.add(User.newUser(request.getName(), request.getPassword()));
+                if (userRepository.findByLogin(request.getLogin()) == null) {
+                    userRepository.save(new User(null, "name", request.getLogin(), request.getPassword(), null));//TODO
                     status = RegistrationStatus.REGISTERED;
                 } else status = RegistrationStatus.NAME_EXISTS;
                 break;
@@ -61,19 +64,4 @@ public class RegistrationService implements IRegistrationService {
 
     }
 
-
-//    @Override
-//    public void setUserDao(AbstractDao<IUser> userDB) {
-//        this.userDao = userDB;
-//    }
-//
-//    @Override
-//    public void setValidator(IValidationService validator) {
-//        this.validator = validator;
-//    }
-//
-//    @Override
-//    public void setFormatter(AbstractRegFormatter formatter) {
-//        this.formatter = formatter;
-//    }
 }

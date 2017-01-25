@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.List;
 
@@ -47,38 +46,23 @@ public class UserRepository extends AbstractRepository<User> {
     @Transactional
     @Override
     public User findById(long id) {
-        return (User) currentSession().get(User.class, id);
+        return (User) currentSession().
+                getNamedQuery("User.findById").setParameter("id", id).uniqueResult();
     }
 
     @Transactional
     @Override
     public List<User> getAll() {
-        List<User> users = null;
-        users = currentSession()
-                .createCriteria(User.class).list();
-        return users;
+        return currentSession().
+                getNamedQuery("User.getAll").list();
     }
 
     @Transactional
     @Override
     public synchronized User findByLogin(String login) {
 
-        EntityManager em = new ;
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Pet> cq = cb.createQuery(Pet.class);
-        Root<Pet> pet = cq.from(Pet.class);
-        cq.select(pet);
-        TypeQuery<Pet> q = em.createQuery(cq);
-        List<Pet> allPets = q.getResultList();
-
-        currentSession().
-                Criter
-
-
-        return (User) currentSession()
-                .createCriteria(User.class)
-                .add(Restrictions.eq("login", login))
-                .list().get(0);
+        return (User) currentSession().
+                getNamedQuery("User.findByLogin").setParameter("login", login).uniqueResult();
     }
 
 

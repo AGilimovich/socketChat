@@ -30,7 +30,7 @@ public class RegRequest extends AbstractRegRequest {
     }
 
     @Override
-    public String getName() {
+    public String getLogin() {
         return name;
     }
 

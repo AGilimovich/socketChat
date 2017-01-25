@@ -1,5 +1,7 @@
 package by.socketchat.service.validation;
 
+import org.springframework.stereotype.Service;
+
 /**
  * Created by Администратор on 22.12.2016.
  */
