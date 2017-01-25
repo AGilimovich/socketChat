@@ -8,13 +8,13 @@ import by.socketchat.formatter.contacts.AbstractContactsFormatter;
 /**
  * Created by Aleksandr on 08.01.2017.
  */
-public abstract class AbstractFormatterFactory {
-    public abstract AbstractAuthFormatter getAuthFormatter();
+public  interface AbstractFormatterFactory {
+    AbstractAuthFormatter getAuthFormatter();
 
-    public abstract AbstractChatFormatter getChatFormatter();
+    AbstractChatFormatter getChatFormatter();
 
-    public abstract AbstractContactsFormatter getContactsFormatter();
+     AbstractContactsFormatter getContactsFormatter();
 
-    public abstract AbstractRegFormatter getRegFormatter();
+    AbstractRegFormatter getRegFormatter();
 
 }

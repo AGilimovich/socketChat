@@ -7,7 +7,7 @@ import by.socketchat.dao.AbstractDaoFactory;
 import by.socketchat.dao.ConcreteDaoFactory;
 import by.socketchat.server.Server;
 import by.socketchat.entity.message.AbstractMessageFactory;
-import by.socketchat.entity.message.ConcreteMessageFactory;
+import by.socketchat.entity.message.webSocketMessageFactory;
 import by.socketchat.formatter.AbstractFormatterFactory;
 import by.socketchat.formatter.WebSocketFormatterFactory;
 import by.socketchat.service.AbstractServiceFactory;
@@ -19,7 +19,7 @@ public class Main {
 
         AbstractServiceFactory serviceFactory = new WebSocketServiceFactory();
         AbstractDaoFactory DaoFactory = new ConcreteDaoFactory();
-        AbstractMessageFactory messageFactory = new ConcreteMessageFactory();
+        AbstractMessageFactory messageFactory = new webSocketMessageFactory();
         AbstractFormatterFactory formatterFactory = new WebSocketFormatterFactory();
         AbstractConnectionFactory connectionFactory = new WebSocketConnectionFactory(new WebsocketConnector());
 

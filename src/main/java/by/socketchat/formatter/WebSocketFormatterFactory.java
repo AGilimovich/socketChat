@@ -12,7 +12,7 @@ import by.socketchat.formatter.contacts.ContactsFormatter;
 /**
  * Created by Aleksandr on 08.01.2017.
  */
-public class WebSocketFormatterFactory extends AbstractFormatterFactory {
+public class WebSocketFormatterFactory implements AbstractFormatterFactory {
 
     @Override
     public AbstractAuthFormatter getAuthFormatter() {

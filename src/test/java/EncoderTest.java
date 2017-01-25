@@ -1,8 +1,3 @@
-import by.socketchat.utility.encoding.Decoder;
-import by.socketchat.utility.encoding.Encoder;
-
-import java.io.UnsupportedEncodingException;
-
 /**
  * Created by Aleksandr on 16.01.2017.
  */
