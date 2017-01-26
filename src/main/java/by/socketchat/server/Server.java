@@ -113,8 +113,6 @@ public class Server implements IServer {
     }
 
 
-
-
     public Server() {
         authenticatedConnections = new HashMap<IConnection, User>();
         authenticatedUsers = new HashSet<User>();
@@ -206,15 +204,17 @@ public class Server implements IServer {
 
 
     @Override
-    public IConnection getUserConnection(User user) {
+    public Set<IConnection> getUserConnection(User user) {
         Iterator<Map.Entry<IConnection, User>> iterator = authenticatedConnections.entrySet().iterator();
         Map.Entry<IConnection, User> entry = null;
+        Set<IConnection> connections = new HashSet<IConnection>();
+
         while (iterator.hasNext()) {
             if ((entry = iterator.next()).getValue().equals(user)) {
-                return entry.getKey();
+                connections.add(entry.getKey());
             }
         }
-        return null;
+        return connections;
     }
 
     @Override

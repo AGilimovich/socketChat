@@ -31,7 +31,7 @@ public interface IServer {
 
     Set<User> getAuthenticatedUsers();
 
-    IConnection getUserConnection(User user);
+    Set<IConnection>  getUserConnection(User user);
 
     User getUserForConnection(IConnection connection);
 

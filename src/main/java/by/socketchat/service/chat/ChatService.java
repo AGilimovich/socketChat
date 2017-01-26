@@ -11,7 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * Created by Aleksandr on 05.01.2017.
@@ -33,16 +36,20 @@ public class ChatService implements IChatService {
 
     @Override
     public void send(ChatMessage message) {
+        Set<IConnection> receiverConnections = server.getUserConnection(message.getReceiver());
 
-        IConnection receiverCon = server.getUserConnection(message.getReceiver());
-        if (receiverCon != null) {
-            try {
-                receiverCon.write(Encoder.encode(formatter.format(message)));
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (!receiverConnections.isEmpty()) {
+            Iterator<IConnection> it = receiverConnections.iterator();
+            while (it.hasNext()) {
+                IConnection connection = it.next();
+                try {
+                    connection.write(Encoder.encode(formatter.format(message)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         } else {
-            messageQueue.add(message);
+            messageQueue.add(message);//TODO
         }
 
     }
