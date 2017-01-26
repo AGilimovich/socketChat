@@ -45,7 +45,7 @@ public class ContactsService implements IContactsService {
             Collection<User> contacts = new HashSet<User>();
             User requester = server.getUserForConnection(connection);
             for (User contact : server.getAuthenticatedUsers()) {
-                if (requester != contact)
+                if (!requester.equals(contact))
                     contacts.add(contact);
             }
 
