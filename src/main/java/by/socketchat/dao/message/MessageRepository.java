@@ -37,7 +37,7 @@ public class MessageRepository extends AbstractRepository<ChatMessage> {
     @Override
     public ChatMessage save(ChatMessage message) {
         Serializable id = currentSession().save(message);
-        return new ChatMessage((Long) id, message.getReceiver(), message.getSender(), message.getContent(), message.getSendTime());
+        return new ChatMessage((Long) id, message.getSender(), message.getReceiver(), message.getContent(), message.getSendTime());
     }
 
     @Transactional

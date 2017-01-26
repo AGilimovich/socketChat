@@ -210,7 +210,7 @@ public class Server implements IServer {
         Iterator<Map.Entry<IConnection, User>> iterator = authenticatedConnections.entrySet().iterator();
         Map.Entry<IConnection, User> entry = null;
         while (iterator.hasNext()) {
-            if ((entry = iterator.next()).getValue() == user) {
+            if ((entry = iterator.next()).getValue().equals(user)) {
                 return entry.getKey();
             }
         }

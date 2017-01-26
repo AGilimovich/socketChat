@@ -52,7 +52,6 @@ public class WebSocketMessageBuilder implements AbstractMessageBuilder {
             return null;
         }
 
-        Date time = new Date();
         User sender = server.getUserForConnection(connection);
         User receiver = userDao.findById(Long.parseLong(properties.getProperty("receiver")));
         String content = properties.getProperty("content");

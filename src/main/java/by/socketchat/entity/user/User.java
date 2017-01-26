@@ -1,9 +1,11 @@
 package by.socketchat.entity.user;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +25,9 @@ import java.util.Properties;
 })
 
 public class User {
+    public class UserOperationException extends IOException {
+    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +39,8 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Generated(GenerationTime.ALWAYS)
-    @Column(name = "regTime", insertable=false,updatable=false)
+    @CreationTimestamp
+    @Column(name = "regTime")
     private Date registrationTime;
 
     @OneToMany
@@ -64,6 +68,9 @@ public class User {
     }
 
     public String getPassword() {
+        Integer a = new Integer(2);
+        Integer b = new Integer(2);
+
         return password;
     }
 
@@ -95,10 +102,16 @@ public class User {
         if (o instanceof User) {
             temp = (User) o;
         } else return false;
-        if (id == temp.getId() && login.equals(temp.getLogin()) && password.equals(temp.getPassword()) && registrationTime.equals(temp.getRegistrationTime())) {
+        if (id == temp.getId()) {
             return true;
         } else return false;
 
+    }
+
+    @Override
+    public int hashCode() {
+        int res = 17;
+        return 31 * 17 + (int) (id^(id>>>32));
     }
 
 

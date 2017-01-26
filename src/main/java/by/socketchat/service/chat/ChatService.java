@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.LinkedList;
 
 /**
  * Created by Aleksandr on 05.01.2017.
@@ -20,6 +21,8 @@ public class ChatService implements IChatService {
     private AbstractRepository<User> userDao;
     private Server server;
     private AbstractChatFormatter formatter;
+    private LinkedList<ChatMessage> messageQueue = new LinkedList<ChatMessage>(); //TODO
+
 
     @Autowired
     public ChatService(Server server, AbstractRepository<User> userDao, AbstractChatFormatter formatter) {
@@ -38,10 +41,10 @@ public class ChatService implements IChatService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            messageQueue.add(message);
         }
 
-
     }
-
 
 }

@@ -1,3 +1,3 @@
 INSERT INTO users (NAME,LOGIN,PASSWORD) VALUES('Alex', 'Alex', '1');
 INSERT INTO users (NAME,LOGIN,PASSWORD) VALUES('Pam', 'Pam', '1');
-INSERT INTO users (NAME,LOGIN,PASSWORD) VALUES('Charlie', 'Alex', '1');
+INSERT INTO users (NAME,LOGIN,PASSWORD) VALUES('Charlie', 'Charlie', '1');

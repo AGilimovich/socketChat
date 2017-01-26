@@ -1,6 +1,7 @@
 package by.socketchat.entity.message.chat;
 
 import by.socketchat.entity.user.User;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 
@@ -35,10 +36,8 @@ public class ChatMessage {
     @Column(name = "content")
     private String content;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @Generated(GenerationTime.ALWAYS)
-    @Column(name = "sendTime", insertable = false, updatable = false)
-
+    @CreationTimestamp
+    @Column(name = "sendTime")
     private Date sendTime;
 
     public ChatMessage(Long id, User sender, User receiver, String content, Date sendTime) {
