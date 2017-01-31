@@ -34,9 +34,9 @@ public class Server implements IServer {
     private int port;
     //FACTORIES
     private AbstractMessageBuilder messageBuilder;
-    //DAO
-    private AbstractRepository<ChatMessage> messageDao;
-    private AbstractRepository<User> userDao;
+    //REPOSITORIES
+    private AbstractRepository<ChatMessage> messageRepository;
+    private AbstractRepository<User> userRepository;
     //SERVICES
     private AbstractConnectionFactory connectionFactory;
     private IRegistrationService registrationService;
@@ -58,13 +58,13 @@ public class Server implements IServer {
     }
 
     @Autowired
-    public void setMessageDao(AbstractRepository<ChatMessage> messageDao) {
-        this.messageDao = messageDao;
+    public void setMessageRepository(AbstractRepository<ChatMessage> messageRepository) {
+        this.messageRepository = messageRepository;
     }
 
     @Autowired
-    public void setUserDao(AbstractRepository<User> userDao) {
-        this.userDao = userDao;
+    public void setUserRepository(AbstractRepository<User> userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Autowired
@@ -134,11 +134,7 @@ public class Server implements IServer {
 
     @Override
     public void onMessage(IConnection connection, byte[] message) {
-
-
-        String decoded = Decoder.decode(message);
-        System.out.println(decoded);
-        Properties properties = Json.parse(decoded);
+        Properties properties = Json.parse(Decoder.decode(message));
         if (properties.isEmpty()) {
             return;
         }

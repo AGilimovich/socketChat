@@ -50,7 +50,6 @@ public class ContactsService implements IContactsService {
             }
 
             try {
-                    System.out.println(formatter.format(contacts));//TODO delete
                     connection.write(Encoder.encode(formatter.format(contacts)));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -59,13 +58,5 @@ public class ContactsService implements IContactsService {
 
     }
 
-//    @Override
-//    public void setUserDao(AbstractRepository<IUser> userDao) {
-//        this.userDao = userDao;
-//    }
-//
-//    @Override
-//    public void setFormatter(AbstractContactsFormatter formatter) {
-//        this.formatter = formatter;
-//    }
+
 }

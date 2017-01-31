@@ -17,7 +17,6 @@ public interface IServer {
 
     void setPort(int port);
 
-
     void closeConnection(AbstractConnection con);
 
     void onMessage(IConnection connection, byte[] message);
@@ -27,7 +26,6 @@ public interface IServer {
     void addAuthenticatedConnection(IConnection connection, User user);
 
     void removeAuthenticatedConnection(IConnection connection);
-
 
     Set<User> getAuthenticatedUsers();
 

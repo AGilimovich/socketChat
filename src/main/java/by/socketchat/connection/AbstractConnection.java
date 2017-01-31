@@ -38,26 +38,6 @@ public abstract class AbstractConnection extends Thread implements IConnection {
     }
 
 
-//    @Override
-//    public synchronized String read() throws IOException {
-//        StringBuilder sb = new StringBuilder();
-//        char[] buf = new char[DEFAULT_BUF_SIZE];
-//        int res = 0;
-//        char[] temp = new char[1];
-//        byte tt = 0;
-//        if (in ==null) {
-//
-//        }
-//
-//        while (in.ready() && (res = in.read()) != -1) {
-//            temp[0] = (char) res;
-//            tt = (byte) res;
-//            sb.append((char) res);
-//
-//        }
-//        return sb.toString();
-//    }
-
 
     @Override
     public synchronized String read() throws IOException {
@@ -84,11 +64,9 @@ public abstract class AbstractConnection extends Thread implements IConnection {
         byte[] data = new byte[size];
         byte[] output = null;
 
-//        for (int i = 0; i < 10; i++) {
         if (byteIn.read(data, 0, 10) == -1) {
             return null;
         }
-//        }
         long dataLen = getDataLen(data);
         long count = 0;
         if (dataLen < 126) {

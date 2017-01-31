@@ -32,6 +32,8 @@ public class ChatService implements IChatService {
         this.server = server;
         this.userDao = userDao;
         this.formatter = formatter;
+
+
     }
 
     @Override
