@@ -9,6 +9,5 @@ import by.socketchat.session.ISession;
  */
 public interface IAuthService {
     ISession authenticate(Connection connection, AbstractAuthRequest request);
-    boolean logOut(ISession session);
 
 }

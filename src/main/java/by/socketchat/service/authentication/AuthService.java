@@ -69,10 +69,6 @@ public class AuthService implements IAuthService {
 
     }
 
-    @Override
-    public boolean logOut(ISession session) {
-        return false;//TODO
-    }
 
     @Autowired
     public void setSessionFactory(AbstractSessionFactory sessionFactory) {

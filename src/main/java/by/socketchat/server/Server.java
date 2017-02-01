@@ -121,7 +121,7 @@ public class Server implements IServer {
                 registrationService.register(connection, messageBuilder.buildRegRequest(properties));
                 break;
             case "4":
-                if (authenticationService.logOut(session)){
+                if (logOut(session)) {
                     closeConnection(session.getConnection());
                 }
             default:
@@ -134,6 +134,11 @@ public class Server implements IServer {
         }
 
 
+    }
+
+    private boolean logOut(ISession session) {
+        closeConnection(session.getConnection());
+        return true;//TODO
     }
 
     @Override
