@@ -10,15 +10,12 @@ public interface IConnection {
     void write(byte[] message) throws IOException;
 
     String read() throws IOException;
+
     byte[] readEncoded() throws IOException;
 
     boolean isActive();
 
     void close();
-
-    ConnectionState getConnectionState();
-
-    void setState(ConnectionState connectionState);
 
     int getDEFAULT_BUF_SIZE();
 

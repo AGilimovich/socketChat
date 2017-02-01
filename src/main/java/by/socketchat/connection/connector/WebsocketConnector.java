@@ -1,6 +1,5 @@
 package by.socketchat.connection.connector;
 
-import by.socketchat.connection.ConnectionState;
 import by.socketchat.connection.IConnection;
 import org.springframework.stereotype.Component;
 
@@ -54,7 +53,6 @@ public class WebsocketConnector implements IConnector {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                con.setState(ConnectionState.CONNECTED);
                 return true;
             }
         }

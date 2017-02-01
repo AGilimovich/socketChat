@@ -11,6 +11,7 @@ import by.socketchat.entity.message.request.registration.AbstractRegRequest;
 import by.socketchat.entity.message.request.registration.RegRequest;
 import by.socketchat.entity.user.User;
 import by.socketchat.server.IServer;
+import by.socketchat.session.ISession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -47,12 +48,12 @@ public class WebSocketMessageBuilder implements AbstractMessageBuilder {
     }
 
     @Override
-    public ChatMessage buildChatMessage(IConnection connection, Properties properties) {
+    public ChatMessage buildChatMessage(ISession session, Properties properties) {
         if (userDao == null || server == null) {
             return null;
         }
 
-        User sender = server.getUserForConnection(connection);
+        User sender = session.getUser();
         User receiver = userDao.findById(Long.parseLong(properties.getProperty("receiver")));
         String content = properties.getProperty("content");
 

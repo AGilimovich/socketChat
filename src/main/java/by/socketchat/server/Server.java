@@ -2,7 +2,6 @@ package by.socketchat.server;
 
 import by.socketchat.connection.AbstractConnection;
 import by.socketchat.connection.AbstractConnectionFactory;
-import by.socketchat.connection.ConnectionState;
 import by.socketchat.connection.IConnection;
 import by.socketchat.dao.AbstractRepository;
 import by.socketchat.entity.message.AbstractMessageBuilder;
@@ -12,11 +11,12 @@ import by.socketchat.formatter.auth.AbstractAuthFormatter;
 import by.socketchat.formatter.chat.AbstractChatFormatter;
 import by.socketchat.formatter.contacts.AbstractContactsFormatter;
 import by.socketchat.formatter.registration.AbstractRegFormatter;
-import by.socketchat.service.authentication.AuthStatus;
 import by.socketchat.service.authentication.IAuthService;
 import by.socketchat.service.chat.IChatService;
 import by.socketchat.service.contacts.IContactsService;
 import by.socketchat.service.registration.IRegistrationService;
+import by.socketchat.session.ISession;
+import by.socketchat.session.SessionStatus;
 import by.socketchat.utility.encoding.Decoder;
 import by.socketchat.utility.json.Json;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Set;
 
 /**
  * Created by Администратор on 29.11.2016.
@@ -34,6 +37,7 @@ public class Server implements IServer {
     private int port;
     //FACTORIES
     private AbstractMessageBuilder messageBuilder;
+
     //REPOSITORIES
     private AbstractRepository<ChatMessage> messageRepository;
     private AbstractRepository<User> userRepository;
@@ -47,9 +51,8 @@ public class Server implements IServer {
     private AbstractAuthFormatter authFormatter;
     private AbstractChatFormatter chatFormatter;
     private AbstractContactsFormatter contactsFormatter;
-    //Server Cache
-    private Map<IConnection, User> authenticatedConnections;
-    private Set<User> authenticatedUsers;
+    //Active sessions
+    private Set<ISession> sessions;
 
 
     @Autowired
@@ -114,8 +117,7 @@ public class Server implements IServer {
 
 
     public Server() {
-        authenticatedConnections = new HashMap<IConnection, User>();
-        authenticatedUsers = new HashSet<User>();
+        sessions = new HashSet<ISession>();
     }
 
     @Override
@@ -126,7 +128,7 @@ public class Server implements IServer {
 
     @Override
     public synchronized void closeConnection(AbstractConnection con) {
-        removeAuthenticatedConnection(con);
+        closeSession(findSession(con));
         if (con.isAlive()) {
             con.stop();
         }
@@ -138,23 +140,24 @@ public class Server implements IServer {
         if (properties.isEmpty()) {
             return;
         }
+        ISession session = findSession(connection);
+
         switch (properties.getProperty("type")) {
             case "0":
-
-                if (authenticationService.authenticate(connection, messageBuilder.buildAuthRequest(properties)) == AuthStatus.AUTHENTICATED) {
+                if ((session = authenticationService.authenticate(connection, messageBuilder.buildAuthRequest(properties))) != null) {
+                    sessions.add(session);
                     contactsService.updateAllAuthenticatedUsersContacts();
                 }
                 break;
             case "1":
-                if (connection.getConnectionState() == ConnectionState.AUTHENTICATED) {
-                    chatService.send(messageBuilder.buildChatMessage(connection, properties));
+                if (session != null) {
+                    chatService.send(messageBuilder.buildChatMessage(session, properties));
                 }
                 break;
             case "2":
-                if (connection.getConnectionState() == ConnectionState.AUTHENTICATED) {
-                    contactsService.updateUserContacts(connection);
+                if (session != null) {
+                    contactsService.updateUserContacts(session);
                 }
-                contactsService.updateUserContacts(connection);
                 break;
             case "3":
                 registrationService.register(connection, messageBuilder.buildRegRequest(properties));
@@ -170,52 +173,50 @@ public class Server implements IServer {
     }
 
     @Override
-    public Map<IConnection, User> getAuthenticatedConnections() {
-        return authenticatedConnections;
+    public Set<ISession> getSessions() {
+        return sessions;
     }
 
 
     @Override
-    public void addAuthenticatedConnection(IConnection connection, User user) {
-        authenticatedConnections.put(connection, user);
-        if (!authenticatedUsers.contains(user)) {
-            authenticatedUsers.add(user);
-        }
-
-    }
-
-    @Override
-    public void removeAuthenticatedConnection(IConnection connection) {
-        User user = getUserForConnection(connection);
-        authenticatedUsers.remove(user);
-        authenticatedConnections.remove(connection);
-        contactsService.updateAllAuthenticatedUsersContacts();
-
-    }
-
-    @Override
-    public Set<User> getAuthenticatedUsers() {
-        return authenticatedUsers;
-    }
-
-
-    @Override
-    public Set<IConnection> getUserConnection(User user) {
-        Iterator<Map.Entry<IConnection, User>> iterator = authenticatedConnections.entrySet().iterator();
-        Map.Entry<IConnection, User> entry = null;
-        Set<IConnection> connections = new HashSet<IConnection>();
-
-        while (iterator.hasNext()) {
-            if ((entry = iterator.next()).getValue().equals(user)) {
-                connections.add(entry.getKey());
+    public Set<ISession> findSession(User user) {
+        Set<ISession> ss = new HashSet<ISession>();
+        Iterator<ISession> it = sessions.iterator();
+        ISession session = null;
+        while (it.hasNext()) {
+            if ((session = it.next()).getUser().equals(user)) {
+                ss.add(session);
             }
         }
-        return connections;
+        return ss;
     }
 
     @Override
-    public User getUserForConnection(IConnection connection) {
-        return authenticatedConnections.get(connection);
+    public ISession findSession(IConnection connection) {
+        ISession session = null;
+        Iterator<ISession> it = sessions.iterator();
+        while (it.hasNext()) {
+            if ((session = it.next()).getConnection() == connection) {
+                return session;
+            }
+
+        }
+        return null;
+    }
+
+    @Override
+    public Set<User> getAuthenticatedUsersSet() {
+        Set<User> users = new HashSet<User>();
+        Iterator<ISession> it = sessions.iterator();
+        while (it.hasNext()) {
+            users.add(it.next().getUser());
+        }
+        return users;
+    }
+
+
+    private void closeSession(ISession session) {
+        sessions.remove(session);
     }
 
     public void start() {

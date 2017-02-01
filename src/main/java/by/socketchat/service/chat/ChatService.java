@@ -6,12 +6,13 @@ import by.socketchat.entity.message.chat.ChatMessage;
 import by.socketchat.entity.user.User;
 import by.socketchat.formatter.chat.AbstractChatFormatter;
 import by.socketchat.server.Server;
+import by.socketchat.session.ISession;
 import by.socketchat.utility.encoding.Encoder;
+import org.h2.engine.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
@@ -38,12 +39,12 @@ public class ChatService implements IChatService {
 
     @Override
     public void send(ChatMessage message) {
-        Set<IConnection> receiverConnections = server.getUserConnection(message.getReceiver());
+        Set<ISession> sessions = server.findSession(message.getReceiver());
 
-        if (!receiverConnections.isEmpty()) {
-            Iterator<IConnection> it = receiverConnections.iterator();
+        if (!sessions.isEmpty()) {
+            Iterator<ISession> it = sessions.iterator();
             while (it.hasNext()) {
-                IConnection connection = it.next();
+                IConnection connection = it.next().getConnection();
                 try {
                     connection.write(Encoder.encode(formatter.format(message)));
                 } catch (IOException e) {

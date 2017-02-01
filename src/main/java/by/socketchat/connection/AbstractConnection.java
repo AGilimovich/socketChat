@@ -12,6 +12,7 @@ public abstract class AbstractConnection extends Thread implements IConnection {
     private OutputStream out;
     private InputStream byteIn;
 
+
     private int DEFAULT_BUF_SIZE = 1024;
 
 

@@ -6,6 +6,7 @@ import by.socketchat.entity.message.request.auth.AbstractAuthRequest;
 import by.socketchat.entity.message.request.contacts.AbstractContactsRequest;
 import by.socketchat.entity.message.request.registration.AbstractRegRequest;
 import by.socketchat.entity.user.User;
+import by.socketchat.session.ISession;
 
 import java.util.Properties;
 
@@ -20,6 +21,6 @@ public interface AbstractMessageBuilder {
 
     AbstractContactsRequest buildContactsRequest(User user, Properties properties);
 
-    ChatMessage buildChatMessage(IConnection connection, Properties properties);
+    ChatMessage buildChatMessage(ISession session, Properties properties);
 
 }

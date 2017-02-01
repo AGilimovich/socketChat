@@ -1,6 +1,7 @@
 package by.socketchat.service.contacts;
 
 import by.socketchat.connection.IConnection;
+import by.socketchat.session.ISession;
 import org.springframework.stereotype.Service;
 
 /**
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 public interface IContactsService {
 
-    void updateUserContacts(IConnection connection);
+    void updateUserContacts(ISession session);
 
     void updateAllAuthenticatedUsersContacts();
 

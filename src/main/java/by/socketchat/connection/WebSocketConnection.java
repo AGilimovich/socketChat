@@ -11,12 +11,10 @@ import java.net.Socket;
  */
 public class WebSocketConnection extends AbstractConnection {
     private IServer server;
-    private ConnectionState connectionState;
 
     public WebSocketConnection(IServer server, Socket socket) throws IOException {
         super(socket);
         this.server = server;
-        connectionState = ConnectionState.CONNECTED;
     }
 
 //    private void onCreate() throws IOException {
@@ -56,14 +54,8 @@ public class WebSocketConnection extends AbstractConnection {
         }
     }
 
-    @Override
-    public void setState(ConnectionState connectionState) {
-        this.connectionState = connectionState;
-    }
 
-    public ConnectionState getConnectionState() {
-        return connectionState;
-    }
+
 
     public void run() {
         String message = null;
