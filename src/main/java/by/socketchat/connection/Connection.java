@@ -6,7 +6,7 @@ import java.net.Socket;
 /**
  * Created by Администратор on 29.11.2016.
  */
-public abstract class AbstractConnection extends Thread implements IConnection {
+public class Connection extends Thread implements IConnection {
 
     private BufferedReader in;
     private OutputStream out;
@@ -17,7 +17,7 @@ public abstract class AbstractConnection extends Thread implements IConnection {
     private final int DEFAULT_BUF_SIZE = 1024;
 
 
-    public AbstractConnection(Socket socket) throws IOException {
+    public Connection(Socket socket) throws IOException {
         this.out = socket.getOutputStream();
         byteIn = socket.getInputStream();
         this.in = new BufferedReader(new InputStreamReader(byteIn, "UTF-8"));
@@ -123,7 +123,6 @@ public abstract class AbstractConnection extends Thread implements IConnection {
     }
 
 
-
     public int getBuffSize() {
         return buffSize;
     }
@@ -132,8 +131,8 @@ public abstract class AbstractConnection extends Thread implements IConnection {
         this.buffSize = bufSize;
     }
 
-
-    protected void onDestroy() throws IOException {
+    @Override
+    public void close() throws IOException {
         in.close();
         out.close();
         byteIn.close();

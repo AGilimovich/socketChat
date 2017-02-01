@@ -1,11 +1,11 @@
 package by.socketchat.service.authentication;
 
 
-import by.socketchat.connection.IConnection;
-import by.socketchat.repository.AbstractRepository;
+import by.socketchat.connection.Connection;
 import by.socketchat.entity.message.request.auth.AbstractAuthRequest;
 import by.socketchat.entity.user.User;
 import by.socketchat.formatter.IMessageFormatter;
+import by.socketchat.repository.AbstractRepository;
 import by.socketchat.session.AbstractSessionFactory;
 import by.socketchat.session.ISession;
 import by.socketchat.utility.encoding.Encoder;
@@ -33,7 +33,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public ISession authenticate(IConnection connection, AbstractAuthRequest request) {
+    public ISession authenticate(Connection connection, AbstractAuthRequest request) {
         List<User> users = userDao.getAll();
         if (users.isEmpty()) {
             try {
@@ -67,6 +67,11 @@ public class AuthService implements IAuthService {
         }
         return null;
 
+    }
+
+    @Override
+    public boolean logOut(ISession session) {
+        return false;//TODO
     }
 
     @Autowired

@@ -1,7 +1,6 @@
 package by.socketchat.connection;
 
 import by.socketchat.server.IServer;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -9,7 +8,7 @@ import java.net.Socket;
 /**
  * Created by Администратор on 13.12.2016.
  */
-public class WebSocketConnection extends AbstractConnection {
+public class WebSocketConnection extends Connection {
     private IServer server;
 
     public WebSocketConnection(IServer server, Socket socket) throws IOException {
@@ -22,7 +21,7 @@ public class WebSocketConnection extends AbstractConnection {
     @Override
     public void close() {
         try {
-            onDestroy();
+            super.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

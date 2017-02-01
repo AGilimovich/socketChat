@@ -54,7 +54,6 @@ public class MessageFormatter implements IMessageFormatter {
     public String format(Collection<User> users) {
         Properties props = new Properties();
         Iterator<User> it = users.iterator();
-
         props.setProperty("type", String.valueOf(MessageType.CONTACTS.getCode()));
         props.setProperty("user", Json.stringify(users));
         return Json.stringify(props);

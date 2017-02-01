@@ -1,6 +1,6 @@
 package by.socketchat.session;
 
-import by.socketchat.connection.IConnection;
+import by.socketchat.connection.Connection;
 import by.socketchat.entity.user.User;
 
 import java.util.Date;
@@ -11,10 +11,10 @@ import java.util.Date;
 
 public class WebSocketSession implements ISession {
     private User user;
-    private IConnection connection;
+    private Connection connection;
     private Date startingTime;
 
-    public WebSocketSession(User user, IConnection connection) {
+    public WebSocketSession(User user, Connection connection) {
         this.user = user;
         this.connection = connection;
         startingTime = new Date();
@@ -27,7 +27,7 @@ public class WebSocketSession implements ISession {
     }
 
     @Override
-    public IConnection getConnection() {
+    public Connection getConnection() {
         return connection;
     }
 

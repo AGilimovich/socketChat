@@ -1,7 +1,6 @@
 package by.socketchat.connection;
 
 import by.socketchat.server.IServer;
-import org.springframework.stereotype.Component;
 
 import java.net.Socket;
 
@@ -10,7 +9,7 @@ import java.net.Socket;
  */
 
 public abstract class AbstractConnectionFactory {
-    public abstract AbstractConnection getConnection(IServer server, Socket socket);
+    public abstract Connection getConnection(IServer server, Socket socket);
 
 
 }

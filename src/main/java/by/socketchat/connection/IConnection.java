@@ -11,6 +11,6 @@ public interface IConnection {
 
     String read() throws IOException;
 
-    void close();
+    void close()throws IOException;
 
 }

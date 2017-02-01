@@ -1,8 +1,7 @@
 package by.socketchat.server;
 
-import by.socketchat.connection.AbstractConnection;
 import by.socketchat.connection.AbstractConnectionFactory;
-import by.socketchat.connection.IConnection;
+import by.socketchat.connection.Connection;
 import by.socketchat.entity.message.AbstractMessageBuilder;
 import by.socketchat.entity.user.User;
 import by.socketchat.service.authentication.IAuthService;
@@ -81,9 +80,8 @@ public class Server implements IServer {
     }
 
 
-
     @Override
-    public synchronized void closeConnection(AbstractConnection con) {
+    public synchronized void closeConnection(Connection con) {
         closeSession(findSession(con));
         if (con.isAlive()) {
             con.stop();
@@ -91,7 +89,7 @@ public class Server implements IServer {
     }
 
     @Override
-    public void onMessage(IConnection connection, byte[] message) {
+    public void onMessage(Connection connection, byte[] message) {
         Properties properties = Json.parse(Decoder.decode(message));
         if (properties.isEmpty()) {
             try {
@@ -123,7 +121,9 @@ public class Server implements IServer {
                 registrationService.register(connection, messageBuilder.buildRegRequest(properties));
                 break;
             case "4":
-                connection.close();
+                if (authenticationService.logOut(session)){
+                    closeConnection(session.getConnection());
+                }
             default:
                 try {
                     connection.write(corruptedMessageResponse.getBytes());//Message corrupted
@@ -156,7 +156,7 @@ public class Server implements IServer {
     }
 
     @Override
-    public ISession findSession(IConnection connection) {
+    public ISession findSession(Connection connection) {
         ISession session = null;
         Iterator<ISession> it = sessions.iterator();
         while (it.hasNext()) {
@@ -199,7 +199,7 @@ public class Server implements IServer {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                AbstractConnection con = connectionFactory.getConnection(this, client);
+                Connection con = connectionFactory.getConnection(this, client);
                 if (con != null) {
                     con.start();
                 }

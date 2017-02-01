@@ -21,7 +21,7 @@ public class WebSocketConnectionFactory extends AbstractConnectionFactory {
     }
 
     @Override
-    public AbstractConnection getConnection(IServer server, Socket socket) {
+    public Connection getConnection(IServer server, Socket socket) {
         if (server == null || socket == null) {
             return null;
         }

@@ -1,6 +1,6 @@
 package by.socketchat.session;
 
-import by.socketchat.connection.IConnection;
+import by.socketchat.connection.Connection;
 import by.socketchat.entity.user.User;
 
 import java.util.Date;
@@ -11,7 +11,7 @@ import java.util.Date;
 public interface ISession {
     User getUser();
 
-    IConnection getConnection();
+    Connection getConnection();
 
     Date getStartingTime();
 

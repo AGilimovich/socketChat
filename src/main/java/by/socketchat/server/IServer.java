@@ -1,12 +1,10 @@
 package by.socketchat.server;
 
-import by.socketchat.connection.AbstractConnection;
+import by.socketchat.connection.Connection;
 import by.socketchat.connection.IConnection;
 import by.socketchat.entity.user.User;
 import by.socketchat.session.ISession;
-import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,15 +17,15 @@ public interface IServer {
     void start();
 
 
-    void onMessage(IConnection connection, byte[] message);
+    void onMessage(Connection connection, byte[] message);
 
-    void closeConnection(AbstractConnection con);
+    void closeConnection(Connection con);
 
     Set<ISession> getSessions();
 
     Set<ISession> findSession(User user);
 
-    ISession findSession(IConnection connection);
+    ISession findSession(Connection connection);
 
     Set<User> getAuthenticatedUsersSet();
 
