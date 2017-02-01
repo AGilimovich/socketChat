@@ -11,15 +11,17 @@ public abstract class AbstractConnection extends Thread implements IConnection {
     private BufferedReader in;
     private OutputStream out;
     private InputStream byteIn;
+    private int buffSize;
 
 
-    private int DEFAULT_BUF_SIZE = 1024;
+    private final int DEFAULT_BUF_SIZE = 1024;
 
 
     public AbstractConnection(Socket socket) throws IOException {
         this.out = socket.getOutputStream();
         byteIn = socket.getInputStream();
         this.in = new BufferedReader(new InputStreamReader(byteIn, "UTF-8"));
+        buffSize = DEFAULT_BUF_SIZE;
 
     }
 
@@ -39,11 +41,10 @@ public abstract class AbstractConnection extends Thread implements IConnection {
     }
 
 
-
     @Override
     public synchronized String read() throws IOException {
         StringBuilder sb = new StringBuilder();
-        byte[] buf = new byte[DEFAULT_BUF_SIZE];
+        byte[] buf = new byte[buffSize];
         char[] temp = new char[1];
         int res = 0;
 
@@ -56,8 +57,6 @@ public abstract class AbstractConnection extends Thread implements IConnection {
     }
 
 
-    //
-    @Override
     public synchronized byte[] readEncoded() throws IOException {
 
 
@@ -135,12 +134,12 @@ public abstract class AbstractConnection extends Thread implements IConnection {
 
     }
 
-    public int getDEFAULT_BUF_SIZE() {
-        return DEFAULT_BUF_SIZE;
+    public int getBuffSize() {
+        return buffSize;
     }
 
-    public void setDEFAULT_BUF_SIZE(int DEFAULT_BUF_SIZE) {
-        this.DEFAULT_BUF_SIZE = DEFAULT_BUF_SIZE;
+    public void setBuffSize(int bufSize) {
+        this.buffSize = bufSize;
     }
 
 

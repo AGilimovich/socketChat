@@ -11,13 +11,11 @@ public interface IConnection {
 
     String read() throws IOException;
 
-    byte[] readEncoded() throws IOException;
-
     boolean isActive();
 
     void close();
 
-    int getDEFAULT_BUF_SIZE();
+    int getBuffSize();
 
-    void setDEFAULT_BUF_SIZE(int DEFAULT_BUF_SIZE);
+    void setBuffSize(int buffSize);
 }

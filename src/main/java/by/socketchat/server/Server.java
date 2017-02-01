@@ -47,10 +47,7 @@ public class Server implements IServer {
     private IAuthService authenticationService;
     private IContactsService contactsService;
     private IChatService chatService;
-    private AbstractRegFormatter regFormatter;
-    private AbstractAuthFormatter authFormatter;
-    private AbstractChatFormatter chatFormatter;
-    private AbstractContactsFormatter contactsFormatter;
+
     //Active sessions
     private Set<ISession> sessions;
 
@@ -95,25 +92,7 @@ public class Server implements IServer {
         this.chatService = chatService;
     }
 
-    @Autowired
-    public void setRegFormatter(AbstractRegFormatter regFormatter) {
-        this.regFormatter = regFormatter;
-    }
 
-    @Autowired
-    public void setAuthFormatter(AbstractAuthFormatter authFormatter) {
-        this.authFormatter = authFormatter;
-    }
-
-    @Autowired
-    public void setChatFormatter(AbstractChatFormatter chatFormatter) {
-        this.chatFormatter = chatFormatter;
-    }
-
-    @Autowired
-    public void setContactsFormatter(AbstractContactsFormatter contactsFormatter) {
-        this.contactsFormatter = contactsFormatter;
-    }
 
 
     public Server() {
