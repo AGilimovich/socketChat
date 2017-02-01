@@ -21,6 +21,6 @@ public interface AbstractMessageBuilder {
 
     AbstractContactsRequest buildContactsRequest(User user, Properties properties);
 
-    ChatMessage buildChatMessage(ISession session, Properties properties);
+    ChatMessage buildChatMessage(User sender, Properties properties);
 
 }

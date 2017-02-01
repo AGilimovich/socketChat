@@ -5,10 +5,6 @@ import by.socketchat.connection.AbstractConnectionFactory;
 import by.socketchat.connection.IConnection;
 import by.socketchat.entity.message.AbstractMessageBuilder;
 import by.socketchat.entity.user.User;
-import by.socketchat.formatter.auth.AbstractAuthFormatter;
-import by.socketchat.formatter.chat.AbstractChatFormatter;
-import by.socketchat.formatter.contacts.AbstractContactsFormatter;
-import by.socketchat.formatter.registration.AbstractRegFormatter;
 import by.socketchat.service.authentication.IAuthService;
 import by.socketchat.service.chat.IChatService;
 import by.socketchat.service.contacts.IContactsService;
@@ -115,7 +111,7 @@ public class Server implements IServer {
                 break;
             case "1":
                 if (session != null) {
-                    chatService.send(messageBuilder.buildChatMessage(session, properties));
+                    chatService.send(messageBuilder.buildChatMessage(session.getUser(), properties));
                 }
                 break;
             case "2":

@@ -47,12 +47,12 @@ public class WebSocketMessageBuilder implements AbstractMessageBuilder {
     }
 
     @Override
-    public ChatMessage buildChatMessage(ISession session, Properties properties) {
+    public ChatMessage buildChatMessage(User sender, Properties properties) {
         if (userDao == null || server == null) {
             return null;
         }
 
-        User sender = session.getUser();
+
         User receiver = userDao.findById(Long.parseLong(properties.getProperty("receiver")));
         String content = properties.getProperty("content");
 
