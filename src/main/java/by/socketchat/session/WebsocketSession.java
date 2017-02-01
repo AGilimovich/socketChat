@@ -13,7 +13,6 @@ public class WebSocketSession implements ISession {
     private User user;
     private IConnection connection;
     private Date startingTime;
-    private SessionStatus status;
 
     public WebSocketSession(User user, IConnection connection) {
         this.user = user;

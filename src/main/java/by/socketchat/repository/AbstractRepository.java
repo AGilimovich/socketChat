@@ -15,6 +15,6 @@ public abstract class AbstractRepository<T> {
 
     public abstract T findById(long id);
 
-    public abstract T findByLogin(String name);
+    public abstract T findByLogin(String login);
 
 }

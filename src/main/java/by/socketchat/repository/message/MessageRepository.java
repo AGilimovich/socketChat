@@ -30,7 +30,7 @@ public class MessageRepository extends AbstractRepository<ChatMessage> {
     @Transactional
     @Override
     public void remove(ChatMessage message) {
-
+        //TODO
     }
 
     @Transactional

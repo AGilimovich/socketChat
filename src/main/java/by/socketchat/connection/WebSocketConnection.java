@@ -31,7 +31,6 @@ public class WebSocketConnection extends AbstractConnection {
 
 
     private void checkIncomingMessage() {
-//        String message = null;
         byte[] bytes = null;
         try {
             if ((bytes = readEncoded()) != null) {

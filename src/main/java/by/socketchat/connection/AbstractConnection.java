@@ -49,7 +49,6 @@ public abstract class AbstractConnection extends Thread implements IConnection {
         int res = 0;
 
         while ((res = byteIn.read(buf)) != -1) {
-            System.out.println("Reading");
             sb.append(new String(buf, "UTF-8"));
             break;
         }
