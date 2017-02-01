@@ -1,4 +1,4 @@
-package by.socketchat.dao;
+package by.socketchat.repository;
 
 import java.util.List;
 

@@ -77,7 +77,6 @@ public class Json {
                 sb.append(COMMA);
             }
             User user = it.next();
-            //  sb.append(FIGURED_BRACKET_OPENED + QUOTE + "user" + user.getId() + QUOTE + COLON);
             sb.append(stringify(user));
             isEmpty = false;
         }
@@ -100,15 +99,6 @@ public class Json {
         return props;
     }
 
-//    public static <T> T[] parseArray(T type, String text) {
-//        try {
-//            T object = (T)type.getClass().newInstance();
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
+
 
 }

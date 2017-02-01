@@ -1,10 +1,9 @@
-package by.socketchat.dao.user;
+package by.socketchat.repository.user;
 
-import by.socketchat.dao.AbstractRepository;
+import by.socketchat.repository.AbstractRepository;
 import by.socketchat.entity.user.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

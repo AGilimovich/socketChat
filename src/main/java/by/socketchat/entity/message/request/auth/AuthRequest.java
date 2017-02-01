@@ -1,6 +1,5 @@
 package by.socketchat.entity.message.request.auth;
 
-import by.socketchat.utility.idgenerator.IDGenerator;
 
 import java.util.Date;
 
@@ -16,7 +15,7 @@ public class AuthRequest extends AbstractAuthRequest {
 
 
     public AuthRequest(String name, String password) {
-        id = IDGenerator.generateMessageID();
+        id = 0;//TODO
         time = new Date();
         this.name = name;
         this.password = password;

@@ -1,7 +1,6 @@
 package by.socketchat.entity.message;
 
-import by.socketchat.connection.IConnection;
-import by.socketchat.dao.AbstractRepository;
+import by.socketchat.repository.AbstractRepository;
 import by.socketchat.entity.message.chat.ChatMessage;
 import by.socketchat.entity.message.request.auth.AbstractAuthRequest;
 import by.socketchat.entity.message.request.auth.AuthRequest;

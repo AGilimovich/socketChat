@@ -3,9 +3,7 @@ package by.socketchat.server;
 import by.socketchat.connection.AbstractConnection;
 import by.socketchat.connection.AbstractConnectionFactory;
 import by.socketchat.connection.IConnection;
-import by.socketchat.dao.AbstractRepository;
 import by.socketchat.entity.message.AbstractMessageBuilder;
-import by.socketchat.entity.message.chat.ChatMessage;
 import by.socketchat.entity.user.User;
 import by.socketchat.formatter.auth.AbstractAuthFormatter;
 import by.socketchat.formatter.chat.AbstractChatFormatter;
@@ -16,7 +14,6 @@ import by.socketchat.service.chat.IChatService;
 import by.socketchat.service.contacts.IContactsService;
 import by.socketchat.service.registration.IRegistrationService;
 import by.socketchat.session.ISession;
-import by.socketchat.session.SessionStatus;
 import by.socketchat.utility.encoding.Decoder;
 import by.socketchat.utility.json.Json;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +32,12 @@ import java.util.Set;
 
 public class Server implements IServer {
     private final int DEFAULT_PORT = 8080;
+    private final String corruptedMessageResponse = "0";
+
     //FACTORIES
     private AbstractMessageBuilder messageBuilder;
 
-    //REPOSITORIES
-    private AbstractRepository<ChatMessage> messageRepository;
-    private AbstractRepository<User> userRepository;
+
     //SERVICES
     private AbstractConnectionFactory connectionFactory;
     private IRegistrationService registrationService;
@@ -51,21 +48,16 @@ public class Server implements IServer {
     //Active sessions
     private Set<ISession> sessions;
 
+    public Server() {
+        sessions = new HashSet<ISession>();
+    }
+
 
     @Autowired
     public void setMessageBuilder(AbstractMessageBuilder messageBuilder) {
         this.messageBuilder = messageBuilder;
     }
 
-    @Autowired
-    public void setMessageRepository(AbstractRepository<ChatMessage> messageRepository) {
-        this.messageRepository = messageRepository;
-    }
-
-    @Autowired
-    public void setUserRepository(AbstractRepository<User> userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Autowired
     public void setConnectionFactory(AbstractConnectionFactory connectionFactory) {
@@ -93,11 +85,6 @@ public class Server implements IServer {
     }
 
 
-    public Server() {
-        sessions = new HashSet<ISession>();
-    }
-
-
 
     @Override
     public synchronized void closeConnection(AbstractConnection con) {
@@ -111,7 +98,11 @@ public class Server implements IServer {
     public void onMessage(IConnection connection, byte[] message) {
         Properties properties = Json.parse(Decoder.decode(message));
         if (properties.isEmpty()) {
-            return;
+            try {
+                connection.write(corruptedMessageResponse.getBytes());//Message corrupted
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         ISession session = findSession(connection);
 
@@ -138,7 +129,11 @@ public class Server implements IServer {
             case "4":
                 connection.close();
             default:
-                return;//TODO message format exception
+                try {
+                    connection.write(corruptedMessageResponse.getBytes());//Message corrupted
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
         }
 

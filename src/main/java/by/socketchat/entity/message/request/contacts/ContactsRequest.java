@@ -1,7 +1,6 @@
 package by.socketchat.entity.message.request.contacts;
 
 import by.socketchat.entity.user.User;
-import by.socketchat.utility.idgenerator.IDGenerator;
 
 import java.util.Date;
 
@@ -17,7 +16,7 @@ public class ContactsRequest extends AbstractContactsRequest {
 
     public ContactsRequest(User user) {
         this.user = user;
-        id = IDGenerator.generateMessageID();
+        id = 0; //TODO
         time = new Date();
 
 

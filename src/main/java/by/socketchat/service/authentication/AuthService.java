@@ -2,11 +2,10 @@ package by.socketchat.service.authentication;
 
 
 import by.socketchat.connection.IConnection;
-import by.socketchat.dao.AbstractRepository;
+import by.socketchat.repository.AbstractRepository;
 import by.socketchat.entity.message.request.auth.AbstractAuthRequest;
 import by.socketchat.entity.user.User;
-import by.socketchat.formatter.auth.AbstractAuthFormatter;
-import by.socketchat.server.Server;
+import by.socketchat.formatter.IMessageFormatter;
 import by.socketchat.session.AbstractSessionFactory;
 import by.socketchat.session.ISession;
 import by.socketchat.utility.encoding.Encoder;
@@ -23,16 +22,14 @@ import java.util.List;
 @Service
 public class AuthService implements IAuthService {
     private AbstractRepository<User> userDao;
-    private AbstractAuthFormatter formatter;
-    private Server server;
+    private IMessageFormatter formatter;
     private AbstractSessionFactory sessionFactory;
 
 
     @Autowired
-    public AuthService(AbstractRepository<User> userDao, AbstractAuthFormatter formatter, Server server) {
+    public AuthService(AbstractRepository<User> userDao, IMessageFormatter formatter) {
         this.userDao = userDao;
         this.formatter = formatter;
-        this.server = server;
     }
 
     @Override

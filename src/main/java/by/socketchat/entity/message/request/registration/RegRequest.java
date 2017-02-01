@@ -1,7 +1,5 @@
 package by.socketchat.entity.message.request.registration;
 
-import by.socketchat.utility.idgenerator.IDGenerator;
-
 import java.util.Date;
 
 /**
@@ -17,7 +15,7 @@ public class RegRequest extends AbstractRegRequest {
 
 
     public RegRequest(String name, String password) {
-        id = IDGenerator.generateMessageID();
+        id = 0; // TODO
         time = new Date();
         this.name = name;
         this.password = password;

@@ -1,6 +1,6 @@
-package by.socketchat.dao.message;
+package by.socketchat.repository.message;
 
-import by.socketchat.dao.AbstractRepository;
+import by.socketchat.repository.AbstractRepository;
 import by.socketchat.entity.message.chat.ChatMessage;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

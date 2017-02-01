@@ -1,9 +1,8 @@
 package by.socketchat.service.contacts;
 
-import by.socketchat.connection.IConnection;
-import by.socketchat.dao.AbstractRepository;
+import by.socketchat.repository.AbstractRepository;
 import by.socketchat.entity.user.User;
-import by.socketchat.formatter.contacts.AbstractContactsFormatter;
+import by.socketchat.formatter.IMessageFormatter;
 import by.socketchat.server.Server;
 import by.socketchat.session.ISession;
 import by.socketchat.utility.encoding.Encoder;
@@ -21,18 +20,15 @@ import java.util.Set;
 @Service
 public class ContactsService implements IContactsService {
     private Server server;
-    private AbstractContactsFormatter formatter;
+    private IMessageFormatter formatter;
 
 
-    //DAO
-    private AbstractRepository<User> userDao;
 
 
     @Autowired
-    public ContactsService(Server server, AbstractContactsFormatter formatter, AbstractRepository<User> userDao) {
+    public ContactsService(Server server, IMessageFormatter formatter, AbstractRepository<User> userDao) {
         this.server = server;
         this.formatter = formatter;
-        this.userDao = userDao;
     }
 
 

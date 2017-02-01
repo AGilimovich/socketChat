@@ -1,10 +1,10 @@
 package by.socketchat.service.registration;
 
 import by.socketchat.connection.IConnection;
-import by.socketchat.dao.AbstractRepository;
+import by.socketchat.repository.AbstractRepository;
 import by.socketchat.entity.message.request.registration.AbstractRegRequest;
 import by.socketchat.entity.user.User;
-import by.socketchat.formatter.registration.AbstractRegFormatter;
+import by.socketchat.formatter.IMessageFormatter;
 import by.socketchat.server.Server;
 import by.socketchat.service.validation.IValidationService;
 import by.socketchat.utility.encoding.Encoder;
@@ -20,15 +20,15 @@ import java.io.IOException;
 public class RegistrationService implements IRegistrationService {
     private AbstractRepository<User> userRepository;
     private IValidationService validator;
-    private AbstractRegFormatter formatter;
-    private Server dispatcher;
+    private IMessageFormatter formatter;
+
 
     @Autowired
-    public RegistrationService(Server dispatcher, AbstractRepository<User> userRepository, AbstractRegFormatter formatter, IValidationService validator) {
+    public RegistrationService(AbstractRepository<User> userRepository, IMessageFormatter formatter, IValidationService validator) {
         this.userRepository = userRepository;
         this.formatter = formatter;
         this.validator = validator;
-        this.dispatcher = dispatcher;
+
     }
 
     @Override
