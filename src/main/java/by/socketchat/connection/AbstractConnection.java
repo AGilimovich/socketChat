@@ -123,16 +123,7 @@ public abstract class AbstractConnection extends Thread implements IConnection {
         return length;
     }
 
-    @Override
-    public boolean isActive() {
-        try {
-            out.write('\u0000');
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
 
-    }
 
     public int getBuffSize() {
         return buffSize;

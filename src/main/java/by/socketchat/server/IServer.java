@@ -14,9 +14,10 @@ import java.util.Set;
  */
 public interface IServer {
 
+    void start(int port);
+
     void start();
 
-    void setPort(int port);
 
     void onMessage(IConnection connection, byte[] message);
 
@@ -29,9 +30,6 @@ public interface IServer {
     ISession findSession(IConnection connection);
 
     Set<User> getAuthenticatedUsersSet();
-
-
-
 
 
 }

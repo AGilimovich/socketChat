@@ -31,6 +31,5 @@
 
 
     <bean id="server" class="by.socketchat.server.Server">
-        <property name="port" value="8080"/>
     </bean>
 </beans>

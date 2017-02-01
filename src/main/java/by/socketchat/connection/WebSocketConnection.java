@@ -17,9 +17,7 @@ public class WebSocketConnection extends AbstractConnection {
         this.server = server;
     }
 
-//    private void onCreate() throws IOException {
-//        server.onConnect(this);
-//    }
+
 
     @Override
     public void close() {
@@ -60,7 +58,6 @@ public class WebSocketConnection extends AbstractConnection {
     public void run() {
         String message = null;
         while (true) {
-            // checkAlive();
             checkIncomingMessage();
         }
 

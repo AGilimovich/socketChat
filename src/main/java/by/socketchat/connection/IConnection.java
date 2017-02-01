@@ -11,11 +11,6 @@ public interface IConnection {
 
     String read() throws IOException;
 
-    boolean isActive();
-
     void close();
 
-    int getBuffSize();
-
-    void setBuffSize(int buffSize);
 }

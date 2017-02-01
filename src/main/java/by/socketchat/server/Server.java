@@ -34,7 +34,7 @@ import java.util.Set;
  */
 
 public class Server implements IServer {
-    private int port;
+    private final int DEFAULT_PORT = 8080;
     //FACTORIES
     private AbstractMessageBuilder messageBuilder;
 
@@ -93,16 +93,10 @@ public class Server implements IServer {
     }
 
 
-
-
     public Server() {
         sessions = new HashSet<ISession>();
     }
 
-    @Override
-    public void setPort(int port) {
-        this.port = port;
-    }
 
 
     @Override
@@ -193,12 +187,12 @@ public class Server implements IServer {
         return users;
     }
 
-
     private void closeSession(ISession session) {
         sessions.remove(session);
     }
 
-    public void start() {
+    @Override
+    public void start(int port) {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(port);
@@ -220,6 +214,11 @@ public class Server implements IServer {
                 }
             }
         }
+    }
+
+    @Override
+    public void start() {
+        start(DEFAULT_PORT);
     }
 
 
