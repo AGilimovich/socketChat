@@ -2,15 +2,17 @@ package by.socketchat.server;
 
 import by.socketchat.connection.AbstractConnectionFactory;
 import by.socketchat.connection.Connection;
-import by.socketchat.entity.message.AbstractMessageBuilder;
 import by.socketchat.entity.user.User;
+import by.socketchat.protocol.ErrorType;
+import by.socketchat.protocol.IMessageFormatter;
+import by.socketchat.protocol.IMessageParser;
+import by.socketchat.request.IRequest;
+import by.socketchat.request.builder.IRequestBuilder;
 import by.socketchat.service.authentication.IAuthService;
 import by.socketchat.service.chat.IChatService;
 import by.socketchat.service.contacts.IContactsService;
 import by.socketchat.service.registration.IRegistrationService;
 import by.socketchat.session.ISession;
-import by.socketchat.utility.encoding.Decoder;
-import by.socketchat.utility.json.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
@@ -18,7 +20,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Properties;
 import java.util.Set;
 
 /**
@@ -27,18 +28,22 @@ import java.util.Set;
 
 public class Server implements IServer {
     private final int DEFAULT_PORT = 8080;
-    private final String corruptedMessageResponse = "0";
 
     //FACTORIES
-    private AbstractMessageBuilder messageBuilder;
+    private AbstractConnectionFactory connectionFactory;
+    private IRequestBuilder requestBuilder;
 
+    //Message Parser
+    private IMessageParser messageParser;
+    //Message Formatter
+    private IMessageFormatter messageFormatter;
 
     //SERVICES
-    private AbstractConnectionFactory connectionFactory;
     private IRegistrationService registrationService;
     private IAuthService authenticationService;
     private IContactsService contactsService;
     private IChatService chatService;
+
 
     //Active sessions
     private Set<ISession> sessions;
@@ -48,15 +53,26 @@ public class Server implements IServer {
     }
 
 
-    @Autowired
-    public void setMessageBuilder(AbstractMessageBuilder messageBuilder) {
-        this.messageBuilder = messageBuilder;
-    }
 
 
     @Autowired
     public void setConnectionFactory(AbstractConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
+    }
+
+    @Autowired
+    public void setRequestBuilder(IRequestBuilder requestBulder) {
+        this.requestBuilder = requestBulder;
+    }
+
+    @Autowired
+    public void setMessageParser(IMessageParser messageParser) {
+        this.messageParser = messageParser;
+    }
+
+    @Autowired
+    public void setMessageFormatter(IMessageFormatter messageFormatter) {
+        this.messageFormatter = messageFormatter;
     }
 
     @Autowired
@@ -90,54 +106,61 @@ public class Server implements IServer {
 
     @Override
     public void onMessage(Connection connection, byte[] message) {
-        Properties properties = Json.parse(Decoder.decode(message));
-        if (properties.isEmpty()) {
+        ISession session = findSession(connection);
+        IRequest request = requestBuilder.buildRequest(connection, messageParser.parse(message));
+
+        if (request == null) {
             try {
-                connection.write(corruptedMessageResponse.getBytes());//Message corrupted
+                connection.write(messageFormatter.format(ErrorType.CORRUPTED_MESSAGE).getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                return;
             }
-        }
-        ISession session = findSession(connection);
 
-        switch (properties.getProperty("type")) {
-            case "0":
-                if ((session = authenticationService.authenticate(connection, messageBuilder.buildAuthRequest(properties))) != null) {
+        }
+
+        switch (request.getType()) {
+            case AUTH:
+                if (session != null) {
+                    try {
+                        connection.write(messageFormatter.format(ErrorType.ALREADY_AUTHEENTICATED).getBytes());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        return;
+                    }
+                }
+                if ((session = authenticationService.authenticate(request)) != null) {
                     sessions.add(session);
                     contactsService.updateAllAuthenticatedUsersContacts();
                 }
                 break;
-            case "1":
-                if (session != null) {
-                    chatService.send(messageBuilder.buildChatMessage(session.getUser(), properties));
-                }
+            case CHAT:
+                chatService.send(request);
                 break;
-            case "2":
-                if (session != null) {
-                    contactsService.updateUserContacts(session);
-                }
+            case CONTACTS:
+                contactsService.updateUserContacts(request);
                 break;
-            case "3":
-                registrationService.register(connection, messageBuilder.buildRegRequest(properties));
+            case LOG_OUT:
+                logOut(session);
                 break;
-            case "4":
-                if (logOut(session)) {
-                    closeConnection(session.getConnection());
-                }
+            case REGISTRATION:
+                registrationService.register(request);
+                break;
             default:
                 try {
-                    connection.write(corruptedMessageResponse.getBytes());//Message corrupted
+                    connection.write(messageFormatter.format(ErrorType.CORRUPTED_MESSAGE).getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
         }
 
 
     }
 
     private boolean logOut(ISession session) {
-        closeConnection(session.getConnection());
+        closeConnection((Connection) session.getConnection());
         return true;//TODO
     }
 

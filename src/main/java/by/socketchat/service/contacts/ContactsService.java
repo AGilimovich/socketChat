@@ -2,7 +2,8 @@ package by.socketchat.service.contacts;
 
 import by.socketchat.repository.AbstractRepository;
 import by.socketchat.entity.user.User;
-import by.socketchat.formatter.IMessageFormatter;
+import by.socketchat.protocol.IMessageFormatter;
+import by.socketchat.request.IRequest;
 import by.socketchat.server.Server;
 import by.socketchat.session.ISession;
 import by.socketchat.utility.encoding.Encoder;
@@ -33,7 +34,8 @@ public class ContactsService implements IContactsService {
 
 
     @Override
-    public void updateUserContacts(ISession session) {
+    public void updateUserContacts(IRequest request) {
+
 //TODO
     }
 

@@ -1,6 +1,6 @@
-package by.socketchat.formatter;
+package by.socketchat.protocol;
 
-import by.socketchat.entity.message.chat.ChatMessage;
+import by.socketchat.entity.message.ChatMessage;
 import by.socketchat.entity.user.User;
 import by.socketchat.service.authentication.AuthStatus;
 import by.socketchat.service.registration.RegistrationStatus;
@@ -24,10 +24,15 @@ public class MessageFormatter implements IMessageFormatter {
 
 
     @Override
-    public String format(RegistrationStatus status) {
+    public String format(RegistrationStatus status, User user) {
         Properties props = new Properties();
         props.setProperty("type", String.valueOf(MessageType.REGISTRATION.getCode()));
         props.setProperty("status", String.valueOf(status.getCode()));
+        if (user != null) {
+            props.setProperty("id", String.valueOf(user.getId()));
+            props.setProperty("login", user.getLogin());
+            props.setProperty("name", user.getName());
+        }
         return Json.stringify(props);
     }
 
@@ -42,12 +47,26 @@ public class MessageFormatter implements IMessageFormatter {
         return Json.stringify(props);
     }
 
+
     @Override
-    public String format(AuthStatus status) {
+    public String format(AuthStatus status, User user) {
+
+
         Properties props = new Properties();
         props.setProperty("type", String.valueOf(MessageType.AUTH.getCode()));
         props.setProperty("status", String.valueOf(status.getCode()));
+        if (user != null) {
+            props.setProperty("id", String.valueOf(user.getId()));
+            props.setProperty("login", user.getLogin());
+            props.setProperty("name", user.getName());
+        }
+
         return Json.stringify(props);
+    }
+
+    @Override
+    public String format(ErrorType type) {
+        return null;
     }
 
     @Override
@@ -58,4 +77,5 @@ public class MessageFormatter implements IMessageFormatter {
         props.setProperty("user", Json.stringify(users));
         return Json.stringify(props);
     }
+
 }

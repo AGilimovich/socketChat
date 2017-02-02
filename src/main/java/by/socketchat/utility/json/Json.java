@@ -62,7 +62,8 @@ public class Json {
     public static <T extends User> String stringify(T user) {
         Properties properties = new Properties();
         properties.setProperty("id", String.valueOf(user.getId()));
-        properties.setProperty("name", user.getLogin());
+        properties.setProperty("login", user.getLogin());
+        properties.setProperty("name", user.getName());
         return stringify(properties);
     }
 

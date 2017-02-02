@@ -1,11 +1,12 @@
 package by.socketchat.service.authentication;
 
 
-import by.socketchat.connection.Connection;
-import by.socketchat.entity.message.request.auth.AbstractAuthRequest;
+import by.socketchat.connection.IConnection;
+import by.socketchat.entity.message.AuthMessage;
 import by.socketchat.entity.user.User;
-import by.socketchat.formatter.IMessageFormatter;
+import by.socketchat.protocol.IMessageFormatter;
 import by.socketchat.repository.AbstractRepository;
+import by.socketchat.request.IRequest;
 import by.socketchat.session.AbstractSessionFactory;
 import by.socketchat.session.ISession;
 import by.socketchat.utility.encoding.Encoder;
@@ -33,11 +34,13 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public ISession authenticate(Connection connection, AbstractAuthRequest request) {
+    public ISession authenticate(IRequest request) {
+        IConnection connection = request.getConnection();
+        AuthMessage message = (AuthMessage) request.getMessage();
         List<User> users = userDao.getAll();
         if (users.isEmpty()) {
             try {
-                connection.write(Encoder.encode(formatter.format(AuthStatus.INVALID_CREDENTIALS)));
+                connection.write(Encoder.encode(formatter.format(AuthStatus.INVALID_CREDENTIALS, null)));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -48,10 +51,10 @@ public class AuthService implements IAuthService {
 
 
         while (it.hasNext()) {
-            if ((u = it.next()).getLogin().equals(request.getName())) {
-                if (u.getPassword().equals(request.getPassword())) {
+            if ((u = it.next()).getLogin().equals(message.getName())) {
+                if (u.getPassword().equals(message.getPassword())) {
                     try {
-                        connection.write(Encoder.encode(formatter.format(AuthStatus.AUTHENTICATED)));
+                        connection.write(Encoder.encode(formatter.format(AuthStatus.AUTHENTICATED, u)));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -61,7 +64,7 @@ public class AuthService implements IAuthService {
             }
         }
         try {
-            connection.write(Encoder.encode(formatter.format(AuthStatus.INVALID_CREDENTIALS)));
+            connection.write(Encoder.encode(formatter.format(AuthStatus.INVALID_CREDENTIALS, null)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,4 +77,6 @@ public class AuthService implements IAuthService {
     public void setSessionFactory(AbstractSessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
+
 }

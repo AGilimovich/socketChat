@@ -1,9 +1,9 @@
-package by.socketchat.entity.message.chat;
+package by.socketchat.entity.message;
 
+import by.socketchat.entity.message.IMessage;
 import by.socketchat.entity.user.User;
+import by.socketchat.protocol.MessageType;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,7 +20,7 @@ import java.util.Date;
         @NamedQuery(name = "ChatMessage.findById", query = "select distinct m from ChatMessage m where m.id = :id")
 })
 
-public class ChatMessage {
+public class ChatMessage implements IMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +40,12 @@ public class ChatMessage {
     @Column(name = "sendTime")
     private Date sendTime;
 
+    @Transient
+    private MessageType type;
+
     public ChatMessage(Long id, User sender, User receiver, String content, Date sendTime) {
         this.id = id;
+        type = MessageType.CHAT;
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
@@ -49,7 +53,7 @@ public class ChatMessage {
     }
 
     public ChatMessage() {
-
+        type = MessageType.CHAT;
     }
 
 
@@ -77,4 +81,8 @@ public class ChatMessage {
     }
 
 
+    @Override
+    public MessageType getType() {
+        return type;
+    }
 }

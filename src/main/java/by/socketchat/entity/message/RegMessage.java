@@ -1,20 +1,25 @@
-package by.socketchat.entity.message.request.registration;
+package by.socketchat.entity.message;
+
+import by.socketchat.entity.message.IMessage;
+import by.socketchat.protocol.MessageType;
 
 import java.util.Date;
 
 /**
  * Created by Aleksandr on 04.01.2017.
  */
-public class RegRequest extends AbstractRegRequest {
+public class RegMessage implements IMessage {
 
 
     private long id;
     private Date time;
     private String name;
     private String password;
+    private MessageType type;
 
 
-    public RegRequest(String name, String password) {
+    public RegMessage(String name, String password) {
+        type = MessageType.REGISTRATION;
         id = 0; // TODO
         time = new Date();
         this.name = name;
@@ -22,25 +27,25 @@ public class RegRequest extends AbstractRegRequest {
     }
 
 
-    @Override
     public long getId() {
         return id;
     }
 
-    @Override
     public String getLogin() {
         return name;
     }
 
-    @Override
     public String getPassword() {
         return password;
     }
 
-    @Override
     public Date getTime() {
         return time;
     }
 
 
+    @Override
+    public MessageType getType() {
+        return type;
+    }
 }

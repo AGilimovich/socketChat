@@ -33,7 +33,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "name")
-    private String name; //TODO
+    private String name;
     @Column(name = "login")
     private String login;
     @Column(name = "password")
@@ -68,9 +68,6 @@ public class User {
     }
 
     public String getPassword() {
-        Integer a = new Integer(2);
-        Integer b = new Integer(2);
-
         return password;
     }
 
@@ -111,7 +108,7 @@ public class User {
     @Override
     public int hashCode() {
         int res = 17;
-        return 31 * 17 + (int) (id^(id>>>32));
+        return 31 * 17 + (int) (id ^ (id >>> 32));
     }
 
 

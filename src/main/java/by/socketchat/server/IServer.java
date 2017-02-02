@@ -3,6 +3,7 @@ package by.socketchat.server;
 import by.socketchat.connection.Connection;
 import by.socketchat.connection.IConnection;
 import by.socketchat.entity.user.User;
+import by.socketchat.request.IRequest;
 import by.socketchat.session.ISession;
 
 import java.util.Set;
@@ -28,6 +29,8 @@ public interface IServer {
     ISession findSession(Connection connection);
 
     Set<User> getAuthenticatedUsersSet();
+
+//    void authenticate(IRequest request);
 
 
 }

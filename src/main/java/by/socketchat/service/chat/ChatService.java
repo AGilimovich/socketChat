@@ -1,10 +1,12 @@
 package by.socketchat.service.chat;
 
 import by.socketchat.connection.IConnection;
+import by.socketchat.entity.message.IMessage;
 import by.socketchat.repository.AbstractRepository;
-import by.socketchat.entity.message.chat.ChatMessage;
+import by.socketchat.entity.message.ChatMessage;
 import by.socketchat.entity.user.User;
-import by.socketchat.formatter.IMessageFormatter;
+import by.socketchat.protocol.IMessageFormatter;
+import by.socketchat.request.IRequest;
 import by.socketchat.server.Server;
 import by.socketchat.session.ISession;
 import by.socketchat.utility.encoding.Encoder;
@@ -37,7 +39,8 @@ public class ChatService implements IChatService {
     }
 
     @Override
-    public void send(ChatMessage message) {
+    public void send(IRequest request) {
+        ChatMessage message = (ChatMessage) request.getMessage();
         Set<ISession> sessions = server.findSession(message.getReceiver());
 
         if (!sessions.isEmpty()) {

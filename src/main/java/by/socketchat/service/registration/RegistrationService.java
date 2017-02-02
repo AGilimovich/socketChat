@@ -1,11 +1,11 @@
 package by.socketchat.service.registration;
 
 import by.socketchat.connection.IConnection;
+import by.socketchat.entity.message.RegMessage;
 import by.socketchat.repository.AbstractRepository;
-import by.socketchat.entity.message.request.registration.AbstractRegRequest;
 import by.socketchat.entity.user.User;
-import by.socketchat.formatter.IMessageFormatter;
-import by.socketchat.server.Server;
+import by.socketchat.protocol.IMessageFormatter;
+import by.socketchat.request.IRequest;
 import by.socketchat.service.validation.IValidationService;
 import by.socketchat.utility.encoding.Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +32,14 @@ public class RegistrationService implements IRegistrationService {
     }
 
     @Override
-    public RegistrationStatus register(IConnection connection, AbstractRegRequest request) {
+    public RegistrationStatus register(IRequest request) {
+        RegMessage message = (RegMessage) request.getMessage();
+        IConnection connection = request.getConnection();
         RegistrationStatus status = null;
-        switch (validator.validate(request.getLogin(), request.getPassword())) {
+        switch (validator.validate(message.getLogin(), message.getPassword())) {
             case VALID:
-                if (userRepository.findByLogin(request.getLogin()) == null) {
-                    userRepository.save(new User(null, "name", request.getLogin(), request.getPassword(), null));//TODO
+                if (userRepository.findByLogin(message.getLogin()) == null) {
+                    userRepository.save(new User(null, "name", message.getLogin(), message.getPassword(), null));//TODO
                     status = RegistrationStatus.REGISTERED;
                 } else status = RegistrationStatus.NAME_EXISTS;
                 break;
@@ -56,7 +58,7 @@ public class RegistrationService implements IRegistrationService {
 
 
         try {
-            connection.write(Encoder.encode(formatter.format(status)));
+            connection.write(Encoder.encode(formatter.format(status, null)));
         } catch (IOException e) {
             e.printStackTrace();
         }

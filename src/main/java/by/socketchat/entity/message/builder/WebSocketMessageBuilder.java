@@ -1,16 +1,9 @@
-package by.socketchat.entity.message;
+package by.socketchat.entity.message.builder;
 
+import by.socketchat.entity.message.*;
 import by.socketchat.repository.AbstractRepository;
-import by.socketchat.entity.message.chat.ChatMessage;
-import by.socketchat.entity.message.request.auth.AbstractAuthRequest;
-import by.socketchat.entity.message.request.auth.AuthRequest;
-import by.socketchat.entity.message.request.contacts.AbstractContactsRequest;
-import by.socketchat.entity.message.request.contacts.ContactsRequest;
-import by.socketchat.entity.message.request.registration.AbstractRegRequest;
-import by.socketchat.entity.message.request.registration.RegRequest;
 import by.socketchat.entity.user.User;
 import by.socketchat.server.IServer;
-import by.socketchat.session.ISession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +16,7 @@ import java.util.Properties;
  * Created by Администратор on 28.12.2016.
  */
 @Component
-public class WebSocketMessageBuilder implements AbstractMessageBuilder {
+public class WebSocketMessageBuilder implements IMessageBuilder {
     private final String timePattern = "DD.MM.YYY HH:mm:ss";
     private DateFormat format = new SimpleDateFormat(timePattern);
     private AbstractRepository<User> userDao;
@@ -47,12 +40,11 @@ public class WebSocketMessageBuilder implements AbstractMessageBuilder {
     }
 
     @Override
-    public ChatMessage buildChatMessage(User sender, Properties properties) {
+    public ChatMessage buildChatMessage(Properties properties) {
         if (userDao == null || server == null) {
             return null;
         }
-
-
+        User sender = userDao.findById(Long.parseLong(properties.getProperty("sender")));
         User receiver = userDao.findById(Long.parseLong(properties.getProperty("receiver")));
         String content = properties.getProperty("content");
 
@@ -60,17 +52,17 @@ public class WebSocketMessageBuilder implements AbstractMessageBuilder {
     }
 
     @Override
-    public AbstractAuthRequest buildAuthRequest(Properties properties) {
+    public AuthMessage buildAuthMessage(Properties properties) {
         Date time = new Date();
         String name = properties.getProperty("name");
         String password = properties.getProperty("password");
 
 
-        return new AuthRequest(name, password);
+        return new AuthMessage(name, password);
     }
 
     @Override
-    public AbstractRegRequest buildRegRequest(Properties properties) {
+    public RegMessage buildRegMessage(Properties properties) {
         Date time = new Date();
 
 
@@ -78,14 +70,23 @@ public class WebSocketMessageBuilder implements AbstractMessageBuilder {
         String password = properties.getProperty("password");
 
 
-        return new RegRequest(name, password);
+        return new RegMessage(name, password);
     }
 
     @Override
-    public AbstractContactsRequest buildContactsRequest(User user, Properties properties) {
+    public ContactsMessage buildContactsMessage(Properties properties) {
         Date time = new Date();
+        User sender = userDao.findById(Long.parseLong(properties.getProperty("sender")));
 
-        return new ContactsRequest(user);
+        return new ContactsMessage(sender);
+    }
+
+    @Override
+    public LogOutMessage buildLogOutMessage(Properties properties) {
+        Date time = new Date();
+        User sender = userDao.findById(Long.parseLong(properties.getProperty("sender")));
+
+        return new LogOutMessage(sender);
     }
 
 
