@@ -124,7 +124,7 @@ public class Server implements IServer {
             case AUTH:
                 if (session != null) {
                     try {
-                        connection.write(messageFormatter.format(ErrorType.ALREADY_AUTHEENTICATED).getBytes());
+                        connection.write(messageFormatter.format(ErrorType.ALREADY_AUTHENTICATED).getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
