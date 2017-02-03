@@ -111,7 +111,7 @@ public class Server implements IServer {
 
         if (request == null) {
             try {
-                connection.write(messageFormatter.format(ErrorType.CORRUPTED_MESSAGE).getBytes());
+                connection.write(messageFormatter.format(ErrorType.INVALID_MESSAGE_FORMAT).getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
@@ -124,7 +124,7 @@ public class Server implements IServer {
             case AUTH:
                 if (session != null) {
                     try {
-                        connection.write(messageFormatter.format(ErrorType.ALREADY_AUTHENTICATED).getBytes());
+                        connection.write(messageFormatter.format(ErrorType.INTERNAL_ERROR).getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
@@ -150,7 +150,7 @@ public class Server implements IServer {
                 break;
             default:
                 try {
-                    connection.write(messageFormatter.format(ErrorType.CORRUPTED_MESSAGE).getBytes());
+                    connection.write(messageFormatter.format(ErrorType.INVALID_MESSAGE_FORMAT).getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
