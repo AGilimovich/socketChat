@@ -1,1 +1,1 @@
-This is a server side for websocket-based chat app.
+This is a server side application for websocket-based chat app.

@@ -39,7 +39,7 @@ public class MessageParser implements IMessageParser {
                 return messageBuilder.buildContactsMessage(properties);
             case REGISTRATION:
                 return messageBuilder.buildRegMessage(properties);
-            case LOG_OUT:
+            case LOGOUT:
                 return messageBuilder.buildLogOutMessage(properties);
             default:
                 return null;

@@ -142,7 +142,7 @@ public class Server implements IServer {
             case CONTACTS:
                 contactsService.updateUserContacts(request);
                 break;
-            case LOG_OUT:
+            case LOGOUT:
                 logOut(session);
                 break;
             case REGISTRATION:
@@ -160,7 +160,7 @@ public class Server implements IServer {
     }
 
     private boolean logOut(ISession session) {
-        closeConnection((Connection) session.getConnection());
+        closeSession(session);
         return true;//TODO
     }
 

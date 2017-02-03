@@ -17,7 +17,7 @@ public class LogOutMessage implements IMessage {
 
 
     public LogOutMessage(User user) {
-        type = MessageType.LOG_OUT;
+        type = MessageType.LOGOUT;
         this.user = user;
         id = 0; //TODO
         time = new Date();
