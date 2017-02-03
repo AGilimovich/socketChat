@@ -39,6 +39,10 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    //TODO
+//    @Column(name = "email")
+//    private String email;
+
     @CreationTimestamp
     @Column(name = "regTime")
     private Date registrationTime;

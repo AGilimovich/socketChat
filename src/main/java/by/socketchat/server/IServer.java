@@ -18,7 +18,7 @@ public interface IServer {
     void start();
 
 
-    void onMessage(Connection connection, byte[] message);
+    void handleMessage(Connection connection, byte[] message);
 
     void closeConnection(Connection con);
 

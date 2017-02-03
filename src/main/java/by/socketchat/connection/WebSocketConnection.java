@@ -34,7 +34,7 @@ public class WebSocketConnection extends Connection {
         try {
             if ((bytes = readEncoded()) != null) {
 
-                server.onMessage(this, bytes);
+                server.handleMessage(this, bytes);
             } else {
                 close();
             }

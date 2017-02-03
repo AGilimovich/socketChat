@@ -105,10 +105,9 @@ public class Server implements IServer {
     }
 
     @Override
-    public void onMessage(Connection connection, byte[] message) {
+    public void handleMessage(Connection connection, byte[] message) {
         ISession session = findSession(connection);
         IRequest request = requestBuilder.buildRequest(connection, messageParser.parse(message));
-
         if (request == null) {
             try {
                 connection.write(messageFormatter.format(ErrorType.INVALID_MESSAGE_FORMAT).getBytes());
