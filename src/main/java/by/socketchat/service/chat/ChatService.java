@@ -23,16 +23,14 @@ import java.util.Set;
  */
 @Service
 public class ChatService implements IChatService {
-    private AbstractRepository<User> userDao;
     private Server server;
     private IMessageFormatter formatter;
     private LinkedList<ChatMessage> messageQueue = new LinkedList<ChatMessage>(); //TODO
 
 
     @Autowired
-    public ChatService(Server server, AbstractRepository<User> userDao, IMessageFormatter formatter) {
+    public ChatService(Server server, IMessageFormatter formatter) {
         this.server = server;
-        this.userDao = userDao;
         this.formatter = formatter;
 
 

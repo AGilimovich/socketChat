@@ -31,7 +31,7 @@ public class UserRepository extends AbstractRepository<User> {
 
     @Transactional
     @Override
-    public void remove(User user) {
+    public void delete(User user) {
             //TODO
     }
 

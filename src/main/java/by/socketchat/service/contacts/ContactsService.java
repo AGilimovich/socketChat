@@ -27,7 +27,7 @@ public class ContactsService implements IContactsService {
 
 
     @Autowired
-    public ContactsService(Server server, IMessageFormatter formatter, AbstractRepository<User> userDao) {
+    public ContactsService(Server server, IMessageFormatter formatter) {
         this.server = server;
         this.formatter = formatter;
     }

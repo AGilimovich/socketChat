@@ -2,10 +2,12 @@ package by.socketchat.utility.encoding;
 
 import java.io.UnsupportedEncodingException;
 
-/**
- * Created by Администратор on 13.12.2016.
- */
+//UTILITY CLASS
+
 public class Encoder {
+    private Encoder() {
+        throw new AssertionError();
+    }
 
     public static byte[] encode(String message) {
         byte[] rawData = new byte[0];

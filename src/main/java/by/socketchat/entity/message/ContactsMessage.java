@@ -3,27 +3,42 @@ package by.socketchat.entity.message;
 import by.socketchat.entity.message.IMessage;
 import by.socketchat.entity.user.User;
 import by.socketchat.protocol.MessageType;
+import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by Aleksandr on 05.01.2017.
- */
-public class ContactsMessage implements IMessage {
 
-    private long id;
+@Entity
+@Table(name = "contactsMessages")
+@NamedQueries({
+        @NamedQuery(name = "ContactsMessage.getAll", query = "select distinct m from ContactsMessage m"),
+        @NamedQuery(name = "ContactsMessage.findById", query = "select distinct m from ContactsMessage m where m.id = :id")
+})
+
+public class ContactsMessage implements IMessage {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @CreationTimestamp
+    @Column(name = "sendTime")
     private Date time;
+    @OneToOne
+    @JoinColumn(name = "user")
     private User user;
+    @Transient
     private MessageType type;
 
 
-    public ContactsMessage(User user) {
+    public ContactsMessage(Long id, Date time, User user) {
         type = MessageType.CONTACTS;
+        this.id = id;
+        this.time = time;
         this.user = user;
-        id = 0; //TODO
-        time = new Date();
+    }
 
-
+    public ContactsMessage() {
+        this.type = MessageType.CONTACTS;
     }
 
     public User getUser() {

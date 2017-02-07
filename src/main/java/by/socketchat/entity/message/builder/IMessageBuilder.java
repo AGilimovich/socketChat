@@ -16,6 +16,6 @@ public interface IMessageBuilder {
 
     ContactsMessage buildContactsMessage(Properties properties);
 
-    LogOutMessage buildLogOutMessage(Properties properties);
+    LogoutMessage buildLogOutMessage(Properties properties);
 
 }

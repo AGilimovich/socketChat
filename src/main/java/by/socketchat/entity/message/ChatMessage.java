@@ -8,9 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by Администратор on 27.12.2016.
- */
 
 @Entity
 @Table(name = "messages")
@@ -26,11 +23,11 @@ public class ChatMessage implements IMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "sender")
     private User sender;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "receiver")
     private User receiver;
     @Column(name = "content")

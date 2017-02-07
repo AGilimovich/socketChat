@@ -51,7 +51,7 @@ public class AuthService implements IAuthService {
 
 
         while (it.hasNext()) {
-            if ((u = it.next()).getLogin().equals(message.getName())) {
+            if ((u = it.next()).getLogin().equals(message.getLogin())) {
                 if (u.getPassword().equals(message.getPassword())) {
                     try {
                         connection.write(Encoder.encode(formatter.format(AuthStatus.AUTHENTICATED, u)));

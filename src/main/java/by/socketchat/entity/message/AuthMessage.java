@@ -2,26 +2,43 @@ package by.socketchat.entity.message;
 
 
 import by.socketchat.protocol.MessageType;
+import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.*;
 import java.util.Date;
 
-/**
- * Created by Aleksandr on 04.01.2017.
- */
+@Entity
+@Table(name = "authMessages")
+@NamedQueries({
+        @NamedQuery(name = "AuthMessage.getAll", query = "select distinct m from AuthMessage m"),
+        @NamedQuery(name = "AuthMessage.findById", query = "select distinct m from AuthMessage m where m.id = :id")
+})
 public class AuthMessage implements IMessage {
-    private long id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @CreationTimestamp
+    @Column(name = "sendTime")
     private Date time;
-    private String name;
+    @Column(name = "login")
+    private String login;
+    @Column(name = "password")
     private String password;
+    @Transient
     private MessageType type;
 
 
-    public AuthMessage(String name, String password) {
-        id = 0;//TODO
+    public AuthMessage(Long id, Date time, String login, String password) {
         type = MessageType.AUTH;
-        time = new Date();
-        this.name = name;
+        this.id = id;
+        this.time = time;
+        this.login = login;
         this.password = password;
+    }
+
+    public AuthMessage() {
+        this.type = MessageType.AUTH;
     }
 
 
@@ -29,8 +46,8 @@ public class AuthMessage implements IMessage {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
     public String getPassword() {

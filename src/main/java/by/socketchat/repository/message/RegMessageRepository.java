@@ -1,7 +1,8 @@
 package by.socketchat.repository.message;
 
-import by.socketchat.repository.AbstractRepository;
 import by.socketchat.entity.message.ChatMessage;
+import by.socketchat.entity.message.RegMessage;
+import by.socketchat.repository.AbstractRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,17 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by Администратор on 27.12.2016.
+ * Created by Aleksandr on 06.02.2017.
  */
+
 @Repository
-public class MessageRepository extends AbstractRepository<ChatMessage> {
+public class RegMessageRepository extends AbstractRepository<RegMessage> {
+
+
     private SessionFactory sessionFactory;
 
     @Autowired
-    public MessageRepository(SessionFactory sessionFactory) {
+    public RegMessageRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -29,38 +33,34 @@ public class MessageRepository extends AbstractRepository<ChatMessage> {
 
     @Transactional
     @Override
-    public void remove(ChatMessage message) {
-        //TODO
+    public void delete(RegMessage ob) {
+
     }
 
     @Transactional
     @Override
-    public ChatMessage save(ChatMessage message) {
+    public RegMessage save(RegMessage message) {
         Serializable id = currentSession().save(message);
-        return new ChatMessage((Long) id, message.getSender(), message.getReceiver(), message.getContent(), message.getSendTime());
+        return new RegMessage((Long) id, message.getTime(), message.getLogin(), message.getPassword());
     }
 
     @Transactional
     @Override
-    public List<ChatMessage> getAll() {
-
+    public List<RegMessage> getAll() {
         return currentSession().
-                getNamedQuery("ChatMessage.getAll").list();
-
+                getNamedQuery("RegMessage.getAll").list();
     }
 
     @Transactional
     @Override
-    public ChatMessage findById(long id) {
-        return (ChatMessage) currentSession().
-                getNamedQuery("ChatMessage.findById").setParameter("id", id).uniqueResult();
+    public RegMessage findById(long id) {
+        return (RegMessage) currentSession().
+                getNamedQuery("RegMessage.findById").setParameter("id", id).uniqueResult();
     }
 
     @Transactional
     @Override
-    public ChatMessage findByLogin(String name) {
+    public RegMessage findByLogin(String login) {
         return null;
     }
-
-
 }

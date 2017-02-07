@@ -21,6 +21,11 @@ public class WebSocketMessageBuilder implements IMessageBuilder {
     private DateFormat format = new SimpleDateFormat(timePattern);
     private AbstractRepository<User> userDao;
     private AbstractRepository<ChatMessage> messageRepository;
+    private AbstractRepository<AuthMessage> authMessageRepository;
+    private AbstractRepository<RegMessage> regMessageRepository;
+    private AbstractRepository<LogoutMessage> logoutMessageRepository;
+    private AbstractRepository<ContactsMessage> contactsMessageRepository;
+
     private IServer server;
 
     @Autowired
@@ -39,6 +44,26 @@ public class WebSocketMessageBuilder implements IMessageBuilder {
         this.messageRepository = messageRepository;
     }
 
+    @Autowired
+    public void setAuthMessageRepository(AbstractRepository<AuthMessage> authMessageRepository) {
+        this.authMessageRepository = authMessageRepository;
+    }
+
+    @Autowired
+    public void setRegMessageRepository(AbstractRepository<RegMessage> regMessageRepository) {
+        this.regMessageRepository = regMessageRepository;
+    }
+
+    @Autowired
+    public void setLogoutMessageRepository(AbstractRepository<LogoutMessage> logoutMessageRepository) {
+        this.logoutMessageRepository = logoutMessageRepository;
+    }
+
+    @Autowired
+    public void setContactsMessageRepository(AbstractRepository<ContactsMessage> contactsMessageRepository) {
+        this.contactsMessageRepository = contactsMessageRepository;
+    }
+
     @Override
     public ChatMessage buildChatMessage(Properties properties) {
         if (userDao == null || server == null) {
@@ -53,40 +78,37 @@ public class WebSocketMessageBuilder implements IMessageBuilder {
 
     @Override
     public AuthMessage buildAuthMessage(Properties properties) {
-        Date time = new Date();
-        String name = properties.getProperty("name");
+        String login = properties.getProperty("login");
         String password = properties.getProperty("password");
 
 
-        return new AuthMessage(name, password);
+        return authMessageRepository.save(new AuthMessage(null, null, login, password));
     }
 
     @Override
     public RegMessage buildRegMessage(Properties properties) {
-        Date time = new Date();
 
 
-        String name = properties.getProperty("name");
+        String login = properties.getProperty("login");
         String password = properties.getProperty("password");
-
-
-        return new RegMessage(name, password);
+        return regMessageRepository.save(new RegMessage(null, null, login, password));
     }
 
     @Override
     public ContactsMessage buildContactsMessage(Properties properties) {
-        Date time = new Date();
+
         User sender = userDao.findById(Long.parseLong(properties.getProperty("sender")));
 
-        return new ContactsMessage(sender);
+        return contactsMessageRepository.save(new ContactsMessage(null, null, sender));
+
     }
 
     @Override
-    public LogOutMessage buildLogOutMessage(Properties properties) {
-        Date time = new Date();
+    public LogoutMessage buildLogOutMessage(Properties properties) {
         User sender = userDao.findById(Long.parseLong(properties.getProperty("sender")));
 
-        return new LogOutMessage(sender);
+        return logoutMessageRepository.save(new LogoutMessage(null, null, sender));
+
     }
 
 

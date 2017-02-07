@@ -3,12 +3,16 @@ CREATE SCHEMA socketChat;
 
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS authMessages;
+DROP TABLE IF EXISTS regMessages;
+DROP TABLE IF EXISTS contactsMessages;
+DROP TABLE IF EXISTS logoutMessages;
 
 
 CREATE TABLE users (
 id IDENTITY,
-name VARCHAR(15) NOT NULL,
 login VARCHAR(15) NOT NULL,
+name VARCHAR(15) NOT NULL,
 password VARCHAR(15) NOT NULL,
 contacts INTEGER,
 regTime TIMESTAMP,
@@ -24,4 +28,33 @@ content VARCHAR(200) NOT NULL,
 sendTime TIMESTAMP NOT NULL,
 FOREIGN KEY (sender) REFERENCES users(id),
 FOREIGN KEY(receiver) REFERENCES users(id)
-)
+);
+
+
+CREATE TABLE authMessages(
+id IDENTITY,
+sendTime TIMESTAMP NOT NULL,
+login VARCHAR(200) NOT NULL,
+password VARCHAR(200) NOT NULL,
+);
+
+CREATE TABLE regMessages(
+id IDENTITY,
+sendTime TIMESTAMP NOT NULL,
+login VARCHAR(200) NOT NULL,
+password VARCHAR(200) NOT NULL,
+);
+
+CREATE TABLE contactsMessages(
+id IDENTITY,
+sendTime TIMESTAMP NOT NULL,
+user INTEGER NOT NULL,
+FOREIGN KEY (user) REFERENCES users(id),
+);
+
+CREATE TABLE logoutMessages(
+id IDENTITY,
+sendTime TIMESTAMP NOT NULL,
+user INTEGER NOT NULL,
+FOREIGN KEY (user) REFERENCES users(id),
+);

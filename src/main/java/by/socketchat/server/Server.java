@@ -160,7 +160,7 @@ public class Server implements IServer {
 
     private boolean logOut(ISession session) {
         closeSession(session);
-        return true;//TODO
+        return true;
     }
 
     @Override
