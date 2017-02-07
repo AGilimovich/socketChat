@@ -12,8 +12,14 @@ DROP TABLE IF EXISTS logoutMessages;
 CREATE TABLE users (
 id IDENTITY,
 login VARCHAR(15) NOT NULL,
-name VARCHAR(15) NOT NULL,
 password VARCHAR(15) NOT NULL,
+email VARCHAR(25) NOT NULL,
+
+
+birthday DATE,
+name VARCHAR(55),
+address VARCHAR(25),
+phone VARCHAR(15),
 contacts INTEGER,
 regTime TIMESTAMP,
 FOREIGN KEY (contacts) REFERENCES users(id)
@@ -33,28 +39,37 @@ FOREIGN KEY(receiver) REFERENCES users(id)
 
 CREATE TABLE authMessages(
 id IDENTITY,
-sendTime TIMESTAMP NOT NULL,
-login VARCHAR(200) NOT NULL,
-password VARCHAR(200) NOT NULL,
+sendTime TIMESTAMP,
+login VARCHAR(15) NOT NULL,
+password VARCHAR(15) NOT NULL,
 );
 
 CREATE TABLE regMessages(
+
+--mandatory:
 id IDENTITY,
-sendTime TIMESTAMP NOT NULL,
-login VARCHAR(200) NOT NULL,
-password VARCHAR(200) NOT NULL,
+sendTime TIMESTAMP,
+login VARCHAR(15) NOT NULL,
+password VARCHAR(15) NOT NULL,
+email VARCHAR(25) NOT NULL,
+
+--optional:
+birthday DATE,
+name VARCHAR(55),
+address VARCHAR(25),
+phone VARCHAR (15)
 );
 
 CREATE TABLE contactsMessages(
 id IDENTITY,
-sendTime TIMESTAMP NOT NULL,
+sendTime TIMESTAMP,
 user INTEGER NOT NULL,
 FOREIGN KEY (user) REFERENCES users(id),
 );
 
 CREATE TABLE logoutMessages(
 id IDENTITY,
-sendTime TIMESTAMP NOT NULL,
+sendTime TIMESTAMP,
 user INTEGER NOT NULL,
 FOREIGN KEY (user) REFERENCES users(id),
 );

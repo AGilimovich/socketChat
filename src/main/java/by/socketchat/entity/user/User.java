@@ -3,6 +3,7 @@ package by.socketchat.entity.user;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.IOException;
@@ -25,23 +26,28 @@ import java.util.Properties;
 })
 
 public class User {
-    public class UserOperationException extends IOException {
-    }
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name")
-    private String name;
+
     @Column(name = "login")
     private String login;
     @Column(name = "password")
     private String password;
 
-    //TODO
-//    @Column(name = "email")
-//    private String email;
+
+    @Column(name = "name")
+    private String name;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "address")
+    private String address;
+    @Column(name = "phone")
+    private String phone;
+    @Column(name = "birthday")
+    private Date birthday;
+
 
     @CreationTimestamp
     @Column(name = "regTime")
@@ -52,12 +58,16 @@ public class User {
     private List<User> contactList = new ArrayList<User>();
 
 
-    public User(Long id, String name, String login, String password, Date registrationTime) {
+    public User(Long id, String name, String login, String password, Date registrationTime, String email, String address, String phone, Date birthday) {
         this.id = id;
         this.name = name;
         this.login = login;
         this.password = password;
         this.registrationTime = registrationTime;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+        this.birthday = birthday;
     }
 
     public User() {
@@ -85,6 +95,22 @@ public class User {
 
     public List<User> getContacts() {
         return contactList;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public Date getBirthday() {
+        return birthday;
     }
 
     public Properties toProperties() {

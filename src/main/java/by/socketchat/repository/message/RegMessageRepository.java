@@ -41,7 +41,7 @@ public class RegMessageRepository extends AbstractRepository<RegMessage> {
     @Override
     public RegMessage save(RegMessage message) {
         Serializable id = currentSession().save(message);
-        return new RegMessage((Long) id, message.getTime(), message.getLogin(), message.getPassword());
+        return new RegMessage((Long) id, message.getTime(), message.getLogin(), message.getPassword(), message.getName(), message.getEmail(), message.getAddress(), message.getPhone(), message.getBirthday());
     }
 
     @Transactional

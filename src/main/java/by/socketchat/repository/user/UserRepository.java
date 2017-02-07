@@ -32,14 +32,14 @@ public class UserRepository extends AbstractRepository<User> {
     @Transactional
     @Override
     public void delete(User user) {
-            //TODO
+        //TODO
     }
 
     @Transactional
     @Override
     public User save(User user) {
         Serializable id = currentSession().save(user);
-        return new User((Long) id, user.getName(), user.getLogin(), user.getPassword(), user.getRegistrationTime());
+        return new User((Long) id, user.getName(), user.getLogin(), user.getPassword(), user.getRegistrationTime(), user.getEmail(), user.getAddress(), user.getPhone(), user.getBirthday());
     }
 
     @Transactional

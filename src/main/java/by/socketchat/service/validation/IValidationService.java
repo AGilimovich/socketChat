@@ -12,4 +12,5 @@ IValidationService {
     void setNamePattern(String namePattern);
 
     void setPasswordPattern(String passwordPattern);
+
 }

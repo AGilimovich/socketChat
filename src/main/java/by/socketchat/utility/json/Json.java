@@ -9,9 +9,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Администратор on 26.12.2016.
- */
+
 public class Json {
 
     protected static final String QUOTE = "\"";
@@ -25,7 +23,7 @@ public class Json {
     private static final String arrayRegex = "\\[.*\\]";
     private static final String objectRegex = "\\{.*\\}";
     private static final String numberRegex = "\\d+";
-    private static final String propertyRegex = "\"(\\w+)\":\"*(\\w+|\\[.+\\]|\\{.+\\})\"*";
+    private static final String propertyRegex = "\"(\\w+)\":\"*([\\w@\\.]+|\\[.+\\]|\\{.+\\})\"*";
 
     private static final Pattern arrayPattern = Pattern.compile(arrayRegex);
     private static final Pattern objectPattern = Pattern.compile(objectRegex);

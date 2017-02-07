@@ -27,21 +27,40 @@ public class RegMessage implements IMessage {
     private String login;
     @Column(name = "password")
     private String password;
+
+
+    @Column(name = "name")
+    private String name;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "address")
+    private String address;
+    @Column(name = "phone")
+    private String phone;
+    @Column(name = "birthday")
+    private Date birthday;
+
     @Transient
     private MessageType type;
 
 
-    public RegMessage(Long id, Date time, String login, String password) {
+    public RegMessage(Long id, Date time, String login, String password, String name, String email, String address, String phone, Date birthday) {
         type = MessageType.REGISTRATION;
         this.id = id;
         this.time = time;
         this.login = login;
         this.password = password;
+        this.name = name;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+        this.birthday = birthday;
     }
 
     public RegMessage() {
         this.type = MessageType.REGISTRATION;
     }
+
 
     public long getId() {
         return id;
@@ -59,9 +78,30 @@ public class RegMessage implements IMessage {
         return time;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
 
     @Override
     public MessageType getType() {
         return type;
     }
+
+
 }
