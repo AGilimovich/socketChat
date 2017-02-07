@@ -61,4 +61,9 @@ public class AuthMessageRepository extends AbstractRepository<AuthMessage> {
     public AuthMessage findByLogin(String login) {
         return null;
     }
+
+    @Override
+    public AuthMessage findByEmail(String email) {
+        return null;
+    }
 }

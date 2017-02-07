@@ -15,4 +15,6 @@ public abstract class AbstractRepository<T> {
 
     public abstract T findByLogin(String login);
 
+    public abstract T findByEmail(String email);
+
 }

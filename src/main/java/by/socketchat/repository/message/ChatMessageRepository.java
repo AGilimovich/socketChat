@@ -62,5 +62,10 @@ public class ChatMessageRepository extends AbstractRepository<ChatMessage> {
         return null;
     }
 
+    @Override
+    public ChatMessage findByEmail(String email) {
+        return null;
+    }
+
 
 }

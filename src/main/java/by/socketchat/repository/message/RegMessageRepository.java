@@ -63,4 +63,9 @@ public class RegMessageRepository extends AbstractRepository<RegMessage> {
     public RegMessage findByLogin(String login) {
         return null;
     }
+
+    @Override
+    public RegMessage findByEmail(String email) {
+        return null;
+    }
 }

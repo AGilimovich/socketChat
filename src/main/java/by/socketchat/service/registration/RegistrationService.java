@@ -39,12 +39,14 @@ public class RegistrationService implements IRegistrationService {
         switch (validator.validate(message.getLogin(), message.getPassword())) {
             case VALID:
                 if (userRepository.findByLogin(message.getLogin()) == null) {
-                    userRepository.save(new User(null, "name", message.getLogin(), message.getPassword(), null, message.getEmail(), message.getAddress(), message.getPhone(), message.getBirthday()));
-                    status = RegistrationStatus.REGISTERED;
-                } else status = RegistrationStatus.NAME_EXISTS;
+                    if (userRepository.findByEmail(message.getEmail()) == null) {
+                        userRepository.save(new User(null, "name", message.getLogin(), message.getPassword(), null, message.getEmail(), message.getAddress(), message.getPhone(), message.getBirthday()));
+                        status = RegistrationStatus.REGISTERED;
+                    } else status = RegistrationStatus.EMAIL_EXISTS;
+                } else status = RegistrationStatus.LOGIN_EXISTS;
                 break;
             case ILLEGAL_NAME:
-                status = RegistrationStatus.ILLEGAL_NAME;
+                status = RegistrationStatus.ILLEGAL_LOGIN;
                 break;
             case ILLEGAL_PASSWORD:
                 status = RegistrationStatus.ILLEGAL_PASSWORD;

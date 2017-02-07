@@ -49,6 +49,12 @@ public class UserRepository extends AbstractRepository<User> {
                 getNamedQuery("User.findById").setParameter("id", id).uniqueResult();
     }
 
+    @Override
+    public User findByEmail(String email) {
+        return (User) currentSession().
+                getNamedQuery("User.findByEmail").setParameter("email", email).uniqueResult();
+    }
+
     @Transactional
     @Override
     public List<User> getAll() {
@@ -63,6 +69,8 @@ public class UserRepository extends AbstractRepository<User> {
         return (User) currentSession().
                 getNamedQuery("User.findByLogin").setParameter("login", login).uniqueResult();
     }
+
+
 
 
 }

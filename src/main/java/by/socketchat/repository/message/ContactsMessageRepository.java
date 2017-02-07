@@ -63,4 +63,9 @@ public class ContactsMessageRepository extends AbstractRepository<ContactsMessag
     public ContactsMessage findByLogin(String login) {
         return null;
     }
+
+    @Override
+    public ContactsMessage findByEmail(String email) {
+        return null;
+    }
 }

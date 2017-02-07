@@ -62,4 +62,9 @@ public class LogoutMessageRepository extends AbstractRepository<LogoutMessage> {
     public LogoutMessage findByLogin(String login) {
         return null;
     }
+
+    @Override
+    public LogoutMessage findByEmail(String email) {
+        return null;
+    }
 }

@@ -22,7 +22,9 @@ import java.util.Properties;
 @NamedQueries({
         @NamedQuery(name = "User.getAll", query = "select distinct u from User u"),
         @NamedQuery(name = "User.findById", query = "select distinct u from User u where u.id = :id"),
-        @NamedQuery(name = "User.findByLogin", query = "select distinct u from User u where u.login = :login")
+        @NamedQuery(name = "User.findByLogin", query = "select distinct u from User u where u.login = :login"),
+        @NamedQuery(name = "User.findByEmail", query = "select distinct u from User u where u.email = :email")
+
 })
 
 public class User {
