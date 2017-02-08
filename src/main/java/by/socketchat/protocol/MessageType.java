@@ -4,7 +4,7 @@ package by.socketchat.protocol;
  * Created by Администратор on 27.12.2016.
  */
 public enum MessageType {
-    AUTH(0), CHAT(1), CONTACTS(2), REGISTRATION(3), LOGOUT(4);
+    AUTH(0), CHAT(1), CONTACTS(2), REGISTRATION(3), LOGOUT(4), COOKIES_AUTH(5);
 
     public int code;
 
@@ -17,7 +17,7 @@ public enum MessageType {
     }
 
     public static MessageType getType(String code) {
-        switch (code){
+        switch (code) {
             case "0":
                 return AUTH;
             case "1":
@@ -28,6 +28,8 @@ public enum MessageType {
                 return REGISTRATION;
             case "4":
                 return LOGOUT;
+            case "5":
+                return COOKIES_AUTH;
         }
         return null;
     }

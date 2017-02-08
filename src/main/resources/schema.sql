@@ -44,8 +44,15 @@ login VARCHAR(15) NOT NULL,
 password VARCHAR(15) NOT NULL,
 );
 
-CREATE TABLE regMessages(
+CREATE TABLE cookiesAuthMessages(
+id IDENTITY,
+sendTime TIMESTAMP,
+login VARCHAR(15) NOT NULL,
+uuid VARCHAR(36) NOT NULL
+);
 
+
+CREATE TABLE regMessages(
 --mandatory:
 id IDENTITY,
 sendTime TIMESTAMP,
@@ -69,7 +76,17 @@ FOREIGN KEY (user) REFERENCES users(id),
 
 CREATE TABLE logoutMessages(
 id IDENTITY,
+startingTime DATE,
+expriringTime DATE,
+user INTEGER NOT NULL,
+FOREIGN KEY (user) REFERENCES users(id),
+);
+
+
+CREATE TABLE sessions(
+uuid VARCHAR (36) UNIQUE NOT NULL,
 sendTime TIMESTAMP,
 user INTEGER NOT NULL,
+PRIMARY KEY (uuid),
 FOREIGN KEY (user) REFERENCES users(id),
 );

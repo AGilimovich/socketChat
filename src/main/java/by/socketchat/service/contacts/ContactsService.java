@@ -1,11 +1,10 @@
 package by.socketchat.service.contacts;
 
-import by.socketchat.repository.AbstractRepository;
+import by.socketchat.entity.session.Session;
 import by.socketchat.entity.user.User;
 import by.socketchat.protocol.IMessageFormatter;
 import by.socketchat.request.IRequest;
 import by.socketchat.server.Server;
-import by.socketchat.session.ISession;
 import by.socketchat.utility.encoding.Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,10 +40,10 @@ public class ContactsService implements IContactsService {
 
     @Override
     public void updateAllAuthenticatedUsersContacts() {
-        Set<ISession> sessions = server.getSessions();
+        Set<Session> sessions = server.getSessions();
 
 
-        for (ISession session : sessions) {
+        for (Session session : sessions) {
             Collection<User> contacts = new HashSet<User>();
             User requester = session.getUser();
 

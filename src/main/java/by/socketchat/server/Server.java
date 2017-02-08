@@ -2,25 +2,24 @@ package by.socketchat.server;
 
 import by.socketchat.connection.AbstractConnectionFactory;
 import by.socketchat.connection.Connection;
+import by.socketchat.entity.session.Session;
 import by.socketchat.entity.user.User;
 import by.socketchat.protocol.ErrorType;
 import by.socketchat.protocol.IMessageFormatter;
 import by.socketchat.protocol.IMessageParser;
+import by.socketchat.repository.session.SessionRepository;
 import by.socketchat.request.IRequest;
 import by.socketchat.request.builder.IRequestBuilder;
 import by.socketchat.service.authentication.IAuthService;
 import by.socketchat.service.chat.IChatService;
 import by.socketchat.service.contacts.IContactsService;
 import by.socketchat.service.registration.IRegistrationService;
-import by.socketchat.session.ISession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Администратор on 29.11.2016.
@@ -46,13 +45,12 @@ public class Server implements IServer {
 
 
     //Active sessions
-    private Set<ISession> sessions;
+    private Set<Session> sessions;
+    private SessionRepository sessionRepository;
 
     public Server() {
-        sessions = new HashSet<ISession>();
+        sessions = Collections.synchronizedSet(new HashSet<Session>());
     }
-
-
 
 
     @Autowired
@@ -95,6 +93,10 @@ public class Server implements IServer {
         this.chatService = chatService;
     }
 
+    @Autowired
+    public void setSessionRepository(SessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
+    }
 
     @Override
     public synchronized void closeConnection(Connection con) {
@@ -106,7 +108,6 @@ public class Server implements IServer {
 
     @Override
     public void handleMessage(Connection connection, byte[] message) {
-        ISession session = findSession(connection);
         IRequest request = requestBuilder.buildRequest(connection, messageParser.parse(message));
         if (request == null) {
             try {
@@ -118,8 +119,9 @@ public class Server implements IServer {
             }
 
         }
-
+        Session session = findSession(connection);
         switch (request.getType()) {
+            case COOKIES_AUTH:
             case AUTH:
                 if (session != null) {
                     try {
@@ -158,22 +160,22 @@ public class Server implements IServer {
 
     }
 
-    private boolean logOut(ISession session) {
+    private boolean logOut(Session session) {
         closeSession(session);
         return true;
     }
 
     @Override
-    public Set<ISession> getSessions() {
+    public Set<Session> getSessions() {
         return sessions;
     }
 
 
     @Override
-    public Set<ISession> findSession(User user) {
-        Set<ISession> ss = new HashSet<ISession>();
-        Iterator<ISession> it = sessions.iterator();
-        ISession session = null;
+    public Set<Session> findSession(User user) {
+        Set<Session> ss = new HashSet<Session>();
+        Iterator<Session> it = sessions.iterator();
+        Session session = null;
         while (it.hasNext()) {
             if ((session = it.next()).getUser().equals(user)) {
                 ss.add(session);
@@ -183,9 +185,9 @@ public class Server implements IServer {
     }
 
     @Override
-    public ISession findSession(Connection connection) {
-        ISession session = null;
-        Iterator<ISession> it = sessions.iterator();
+    public Session findSession(Connection connection) {
+        Session session = null;
+        Iterator<Session> it = sessions.iterator();
         while (it.hasNext()) {
             if ((session = it.next()).getConnection() == connection) {
                 return session;
@@ -196,16 +198,33 @@ public class Server implements IServer {
     }
 
     @Override
+    public Session findSession(UUID uuid) {
+        Session session = null;
+        Iterator<Session> it = sessions.iterator();
+        while (it.hasNext()) {
+            if ((session = it.next()).getUuid().equals(uuid)) {
+                return session;
+            }
+
+        }
+        return null;
+    }
+
+
+    @Override
     public Set<User> getAuthenticatedUsersSet() {
         Set<User> users = new HashSet<User>();
-        Iterator<ISession> it = sessions.iterator();
+        Iterator<Session> it = sessions.iterator();
         while (it.hasNext()) {
             users.add(it.next().getUser());
         }
         return users;
     }
 
-    private void closeSession(ISession session) {
+    private void closeSession(Session session) {
+        if (session.isStoreSession()) {
+            sessionRepository.save(session);
+        }
         sessions.remove(session);
     }
 
@@ -238,6 +257,5 @@ public class Server implements IServer {
     public void start() {
         start(DEFAULT_PORT);
     }
-
 
 }

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Aleksandr on 07.02.2017.
@@ -65,6 +66,11 @@ public class LogoutMessageRepository extends AbstractRepository<LogoutMessage> {
 
     @Override
     public LogoutMessage findByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public LogoutMessage findByUuid(UUID uuid) {
         return null;
     }
 }

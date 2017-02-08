@@ -1,11 +1,11 @@
 package by.socketchat.protocol;
 
 import by.socketchat.entity.message.ChatMessage;
+import by.socketchat.entity.session.Session;
 import by.socketchat.entity.user.User;
 import by.socketchat.service.authentication.AuthStatus;
 import by.socketchat.service.registration.RegistrationStatus;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.Collection;
 
 /**
@@ -18,7 +18,7 @@ public interface IMessageFormatter {
 
     String format(ChatMessage message);
 
-    String format(AuthStatus status, User user);
+    String format(AuthStatus status, Session session);
 
     String format(ErrorType type);
 }

@@ -1,7 +1,6 @@
 package by.socketchat.repository.message;
 
-import by.socketchat.entity.message.AuthMessage;
-import by.socketchat.entity.message.ChatMessage;
+import by.socketchat.entity.message.CookiesAuthMessage;
 import by.socketchat.repository.AbstractRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,17 +12,13 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Created by Aleksandr on 06.02.2017.
- */
-
 @Repository
-public class AuthMessageRepository extends AbstractRepository<AuthMessage> {
+public class CookiesAuthMessageRepository extends AbstractRepository<CookiesAuthMessage> {
 
     private SessionFactory sessionFactory;
 
     @Autowired
-    public AuthMessageRepository(SessionFactory sessionFactory) {
+    public CookiesAuthMessageRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -32,44 +27,45 @@ public class AuthMessageRepository extends AbstractRepository<AuthMessage> {
     }
 
     @Override
-    public void delete(AuthMessage ob) {
+    public void delete(CookiesAuthMessage ob) {
 
     }
 
     @Transactional
     @Override
-    public AuthMessage save(AuthMessage message) {
+    public CookiesAuthMessage save(CookiesAuthMessage message) {
         Serializable id = currentSession().save(message);
-        return new AuthMessage((Long) id, message.getTime(), message.getLogin(), message.getPassword(), message.isRememberMe());
+        return new CookiesAuthMessage((Long) id, message.getTime(), message.getLogin(), message.getUuid());
     }
 
     @Transactional
     @Override
-    public List<AuthMessage> getAll() {
+    public List<CookiesAuthMessage> getAll() {
         return currentSession().
-                getNamedQuery("AuthMessage.getAll").list();
+                getNamedQuery("CookiesAuthMessage.getAll").list();
     }
 
     @Transactional
     @Override
-    public AuthMessage findById(long id) {
-        return (AuthMessage) currentSession().
-                getNamedQuery("AuthMessage.findById").setParameter("id", id).uniqueResult();
+    public CookiesAuthMessage findById(long id) {
+        return (CookiesAuthMessage) currentSession().
+                getNamedQuery("CookiesAuthMessage.findById").setParameter("id", id).uniqueResult();
     }
 
     @Transactional
     @Override
-    public AuthMessage findByLogin(String login) {
+    public CookiesAuthMessage findByLogin(String login) {
+        return null;
+    }
+
+    @Transactional
+    @Override
+    public CookiesAuthMessage findByEmail(String email) {
         return null;
     }
 
     @Override
-    public AuthMessage findByEmail(String email) {
-        return null;
-    }
-
-    @Override
-    public AuthMessage findByUuid(UUID uuid) {
+    public CookiesAuthMessage findByUuid(UUID uuid) {
         return null;
     }
 }

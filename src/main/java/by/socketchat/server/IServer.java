@@ -1,12 +1,11 @@
 package by.socketchat.server;
 
 import by.socketchat.connection.Connection;
-import by.socketchat.connection.IConnection;
+import by.socketchat.entity.session.Session;
 import by.socketchat.entity.user.User;
-import by.socketchat.request.IRequest;
-import by.socketchat.session.ISession;
 
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * Created by Администратор on 29.11.2016.
@@ -22,15 +21,15 @@ public interface IServer {
 
     void closeConnection(Connection con);
 
-    Set<ISession> getSessions();
+    Set<Session> getSessions();
 
-    Set<ISession> findSession(User user);
+    Set<Session> findSession(User user);
 
-    ISession findSession(Connection connection);
+    Session findSession(Connection connection);
+
+    Session findSession(UUID uuid);
 
     Set<User> getAuthenticatedUsersSet();
-
-//    void authenticate(IRequest request);
 
 
 }

@@ -25,16 +25,19 @@ public class AuthMessage implements IMessage {
     private String login;
     @Column(name = "password")
     private String password;
+    @Column(name = "rememberMe")
+    private boolean rememberMe;
     @Transient
     private MessageType type;
 
 
-    public AuthMessage(Long id, Date time, String login, String password) {
+    public AuthMessage(Long id, Date time, String login, String password, boolean rememberMe) {
         type = MessageType.AUTH;
         this.id = id;
         this.time = time;
         this.login = login;
         this.password = password;
+        this.rememberMe = rememberMe;
     }
 
     public AuthMessage() {
@@ -62,5 +65,9 @@ public class AuthMessage implements IMessage {
     @Override
     public MessageType getType() {
         return type;
+    }
+
+    public boolean isRememberMe() {
+        return rememberMe;
     }
 }

@@ -1,6 +1,7 @@
 package by.socketchat.protocol;
 
 import by.socketchat.entity.message.ChatMessage;
+import by.socketchat.entity.session.Session;
 import by.socketchat.entity.user.User;
 import by.socketchat.service.authentication.AuthStatus;
 import by.socketchat.service.registration.RegistrationStatus;
@@ -49,13 +50,14 @@ public class MessageFormatter implements IMessageFormatter {
 
 
     @Override
-    public String format(AuthStatus status, User user) {
-
-
+    public String format(AuthStatus status, Session session) {
         Properties props = new Properties();
         props.setProperty("type", String.valueOf(MessageType.AUTH.getCode()));
         props.setProperty("status", String.valueOf(status.getCode()));
-        if (user != null) {
+
+        if (session != null) {
+            User user = session.getUser();
+            props.setProperty("cookie", session.getUuid().toString());
             props.setProperty("id", String.valueOf(user.getId()));
             props.setProperty("login", user.getLogin());
             props.setProperty("name", user.getName());

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Aleksandr on 06.02.2017.
@@ -66,6 +67,11 @@ public class RegMessageRepository extends AbstractRepository<RegMessage> {
 
     @Override
     public RegMessage findByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public RegMessage findByUuid(UUID uuid) {
         return null;
     }
 }

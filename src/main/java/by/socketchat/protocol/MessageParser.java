@@ -32,6 +32,7 @@ public class MessageParser implements IMessageParser {
 
         switch (type) {
             case AUTH:
+            case COOKIES_AUTH:
                 return messageBuilder.buildAuthMessage(properties);
             case CHAT:
                 return messageBuilder.buildChatMessage(properties);

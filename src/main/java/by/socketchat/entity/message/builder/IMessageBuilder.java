@@ -18,4 +18,6 @@ public interface IMessageBuilder {
 
     LogoutMessage buildLogOutMessage(Properties properties);
 
+    CookiesAuthMessage buildAutoAuthMessage(Properties properties);
+
 }

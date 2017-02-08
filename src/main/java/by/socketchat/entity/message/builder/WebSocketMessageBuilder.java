@@ -1,31 +1,30 @@
 package by.socketchat.entity.message.builder;
 
 import by.socketchat.entity.message.*;
-import by.socketchat.repository.AbstractRepository;
 import by.socketchat.entity.user.User;
+import by.socketchat.repository.AbstractRepository;
 import by.socketchat.server.IServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.UUID;
 
 /**
  * Created by Администратор on 28.12.2016.
  */
 @Component
 public class WebSocketMessageBuilder implements IMessageBuilder {
-    private final String timePattern = "DD.MM.YYY HH:mm:ss";
-    private DateFormat format = new SimpleDateFormat(timePattern);
     private AbstractRepository<User> userDao;
     private AbstractRepository<ChatMessage> messageRepository;
     private AbstractRepository<AuthMessage> authMessageRepository;
     private AbstractRepository<RegMessage> regMessageRepository;
     private AbstractRepository<LogoutMessage> logoutMessageRepository;
     private AbstractRepository<ContactsMessage> contactsMessageRepository;
+    private AbstractRepository<CookiesAuthMessage> CookiesMessageRepository;
 
     private IServer server;
 
@@ -65,6 +64,11 @@ public class WebSocketMessageBuilder implements IMessageBuilder {
         this.contactsMessageRepository = contactsMessageRepository;
     }
 
+    @Autowired
+    public void setCookiesAuthMessageRepository(AbstractRepository<CookiesAuthMessage> cookiesAuthMessageRepository) {
+        this.CookiesMessageRepository = cookiesAuthMessageRepository;
+    }
+
     @Override
     public ChatMessage buildChatMessage(Properties properties) {
         if (userDao == null || server == null) {
@@ -84,12 +88,13 @@ public class WebSocketMessageBuilder implements IMessageBuilder {
     public AuthMessage buildAuthMessage(Properties properties) {
         String login = properties.getProperty("login");
         String password = properties.getProperty("password");
+        boolean rememberMe = Boolean.parseBoolean(properties.getProperty("rememberMe"));
 
         if (login == null || password == null) {
             return null;
         }
 
-        return authMessageRepository.save(new AuthMessage(null, null, login, password));
+        return authMessageRepository.save(new AuthMessage(null, null, login, password, rememberMe));
     }
 
     @Override
@@ -136,6 +141,13 @@ public class WebSocketMessageBuilder implements IMessageBuilder {
         }
         return logoutMessageRepository.save(new LogoutMessage(null, null, sender));
 
+    }
+
+    @Override
+    public CookiesAuthMessage buildAutoAuthMessage(Properties properties) {
+        String login = properties.getProperty("login");
+        UUID uuid = UUID.fromString(properties.getProperty("cookie"));
+        return CookiesMessageRepository.save(new CookiesAuthMessage(null, null, login, uuid));
     }
 
 

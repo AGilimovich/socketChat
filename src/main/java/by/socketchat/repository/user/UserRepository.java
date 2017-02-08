@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Администратор on 27.12.2016.
@@ -48,11 +49,16 @@ public class UserRepository extends AbstractRepository<User> {
         return (User) currentSession().
                 getNamedQuery("User.findById").setParameter("id", id).uniqueResult();
     }
-
+    @Transactional
     @Override
     public User findByEmail(String email) {
         return (User) currentSession().
                 getNamedQuery("User.findByEmail").setParameter("email", email).uniqueResult();
+    }
+    @Transactional
+    @Override
+    public User findByUuid(UUID uuid) {
+        return null;
     }
 
     @Transactional

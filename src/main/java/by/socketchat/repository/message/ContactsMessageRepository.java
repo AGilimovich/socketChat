@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Aleksandr on 07.02.2017.
@@ -66,6 +67,11 @@ public class ContactsMessageRepository extends AbstractRepository<ContactsMessag
 
     @Override
     public ContactsMessage findByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public ContactsMessage findByUuid(UUID uuid) {
         return null;
     }
 }

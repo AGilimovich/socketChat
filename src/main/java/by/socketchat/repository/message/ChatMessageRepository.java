@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Администратор on 27.12.2016.
@@ -64,6 +65,11 @@ public class ChatMessageRepository extends AbstractRepository<ChatMessage> {
 
     @Override
     public ChatMessage findByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public ChatMessage findByUuid(UUID uuid) {
         return null;
     }
 
